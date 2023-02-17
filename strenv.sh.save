@@ -1,0 +1,2 @@
+. .venv/bin/activatesudo service postgresql start
+. .venv/bin/activate

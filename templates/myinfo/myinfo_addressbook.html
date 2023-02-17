@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% block content %}
+<div class="container">
+<section class="bg-light p-3">
+    <h3 class="boarder-bottom pb-3">{{_("Manage address book")}}</h3>
+        <div class="table-responsive" id="no-more-tables">
+                <table class="table bg-white text-center">
+                    <thead class="bg-info">
+                        <tr>
+                            <th>{{_("Company name")}}</th>
+                            <th>{{_("Company branch")}}</th>
+                            <th>{{_("Address")}}</th>
+                            <th>{{_("Status")}}</th>
+                            <th>{{_("Apply")}}</th>
+
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for addr in address %}
+                        <tr class="{% if addr.default %} table-warning {% endif %}">
+                            <td data-title="상호">{{addr.e_name}}</td>
+                            <td data-title="점포">{{addr.nick_name}}</td>
+                            <td data-title="주소">{{addr.address}},{{addr.city}}</td>
+                            <td data-title="상태">
+                                {% if addr.default %}
+                                <p class="bg-warning bg-">{{_("Default address")}}</p>
+                                {% endif %}
+                            </td>
+                            <td data-title="선택">
+                                <a class="p-1 addr_id" href="{% url 'company:set_default' addr.id %}">
+                                    <button type="button" class="btn btn-sm btn-primary selectAddrBtn">
+                                        {{_("Apply")}}</button></a>
+                                    </td>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+</section> 
+</div>
+{% endblock content %}

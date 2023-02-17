@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+{% load i18n %}
+{% block content %}
+<div class="container">
+    <section class="bg-light p-3">
+        <h3 class="text-center pb-3">{{ _('Purchase Order') }}</h3>
+            {% for addr in address %}
+                {% if addr.default == True %}
+            <p class="text-start">[ {{_('Delivery to')}}: <strong>{{addr.e_name}}-{{addr.address}},{{addr.city}}</strong> ]</p>
+                {% endif %}
+            {% endfor %}
+            <div class="cartdata table-responsive" id="no-more-tables">
+                <table class="table bg-white carddata">
+                    <thead class="bg-success text-light">
+                        <tr>
+                            <th>#</th>
+                            <th>{{_('Product')}}</th>
+                            <th>{{_('Spec')}}</th>
+                            <th>{{_('Unit')}}</th>
+                            <th>{{_('Qty')}}</th>
+                            <th>{{_('Delete')}}</th>
+                        </tr>
+                    </thead>
+                    <tbody class="product_data carddata">
+                        {% for item in cart %}
+                        <tr>
+                            <td data-title="#">{{forloop.counter}}</td>
+                            <td data-title="Product">{{item.product.title}}<br><small>{{item.product.e_title}}</small></td>
+                            <td data-title="Spec">{{item.product.spec}}</td>
+                            <td data-title="Unit">{{item.product.unit}}</td>
+                            <td data-title="Qty">
+                                <div class="product_data">
+                                    <input type="hidden" class="prod_id" value="{{ item.product.id }}">
+                                    {% csrf_token %}
+                                    <div class="imput-group text-center mb-3 d-flex flex-nowrap" style="width:130px; height:25px;">
+                                        <button class="input-group-text changeQuantity decrement-btn">-</button>
+                                        <input type="text" name="quantity" class="form-control qty-input text-center" style="font-size:0.9rem"
+                                            value="{{item.product_qty}}">
+                                        <button class="input-group-text changeQuantity increment-btn">+</button>
+                                    </div>
+                                </div>
+                            </td>
+                            <td data-title="Delete">
+                                <input type="hidden" class="prod_id" value="{{ item.product.id }}">
+                                {% csrf_token %}
+                                <button class="btn btn-danger btn-sm delete-cart-item" style="font-size: 1rem;">{{_('Delete')}} <i class="bi bi-trash"></i></button>                           
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                {% if cart|length > 0 %}
+                <a href="{% url 'store:checkout' %}" class="btn btn-outline-success float-end">{{_('Proceed to Order')}}</a>
+                {% endif %}
+            </div>
+        </section>
+    </div>
+{% endblock content %}

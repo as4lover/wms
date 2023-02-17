@@ -1,0 +1,77 @@
+<nav class="navbar sticky-top navbar-expand-lg navbar-dark" style="background-color:#417690;">
+    <div class="container">
+      <a class="navbar-brand" href="{% url 'storeman:admin_home' %}"><img src="/media/images/gomaps.png" alt="" style="height: 30px;"></a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+        aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+           <ul class="navbar-nav me-auto mb-2">
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle text-white" href="#" role="button" data-bs-toggle="dropdown"
+              aria-expanded="false">
+              주문관리
+            </a>
+    <ul class="dropdown-menu">
+              <li><a class="dropdown-item" href="{% url 'storeman:order_list' %}">주문현황</a></li>
+              <li><a class="dropdown-item" href="{% url 'storeman:create_order' %}">주문작성</a></li>
+            </ul>
+          </li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle text-white" href="#" role="button" data-bs-toggle="dropdown"
+              aria-expanded="false">
+              배송관리
+            </a>
+            <ul class="dropdown-menu">
+              <li><a class="dropdown-item" href="">배송현황</a></li>
+            </ul>
+          </li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle text-white" href="#" role="button" data-bs-toggle="dropdown"
+              aria-expanded="false">
+              제품관리
+            </a>
+            <ul class="dropdown-menu">
+              <li><a class="dropdown-item" href="{% url 'storeman:product_list' %}">제품현황</a></li>
+              <li><a class="dropdown-item" href="{% url 'storeman:create_product' %}">제품추가</a></li>
+            </ul>
+
+          </li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle text-white" href="#" role="button" data-bs-toggle="dropdown"
+              aria-expanded="false">
+              고객관리
+            </a>
+            <ul class="dropdown-menu">
+              <li><a class="dropdown-item" href="{% url 'storeman:display_customer_list' %}">고객현황</a></li>
+              <li><a class="dropdown-item" href="{% url 'storeman:create_customer' %}">고객등록</a></li>
+            </ul>
+          </li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle text-white" href="#" role="button" data-bs-toggle="dropdown"
+              aria-expanded="false">
+              직원관리
+            </a>
+            <ul class="dropdown-menu">
+              <li><a class="dropdown-item" href="">직원현황</a></li>
+            </ul>
+          </li>          
+</ul>
+        <ul>
+          <li class="nav-item dropdown float-end">
+            <a class="nav-link dropdown-toggle text-white" href="#" role="button" data-bs-toggle="dropdown"
+              aria-expanded="false">
+              <i class="fa-regular fa-circle-user"></i> {{request.user.username}}</a>
+            <ul class="dropdown-menu">
+              <li><a class="dropdown-item" href="{% url 'account_logout' %}">{{_('Logout')}}</a></li>
+            </ul>
+          </li>
+        </ul>
+
+
+
+
+      </div>
+    </div>
+  </nav>
+<!--end of navbar-->

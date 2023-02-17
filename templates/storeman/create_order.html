@@ -1,0 +1,11 @@
+{% extends './admin_base.html' %}
+
+{% block content %}
+<div class="container">
+    주문하기
+    <form action="" method="POST">
+        {% csrf_token %}
+        {{formset.as_p}}
+    </form>
+</div>
+{% endblock content %}

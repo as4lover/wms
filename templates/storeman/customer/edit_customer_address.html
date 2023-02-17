@@ -1,0 +1,43 @@
+{% extends '../admin_base.html' %}
+{% load crispy_forms_tags %}
+{% load widget_tweaks %}
+{% block content %}
+<div class="container p-2">
+    <div class="card">
+        <div class="card-header">배송지 수정</div>
+        <div class="card-body">
+            <form method="POST">
+                {% csrf_token %}
+                {{form|crispy}}
+                <div class="card-footer">
+                    <button type="submit" class="btn btn-outline-warning">업데이트</button>
+                    <a href="{% url "storeman:display_customer_details" customer.id %}" class="btn btn-outline-primary">뒤로가기</a>
+                    <a href="#delModal" roll="button" data-bs-toggle="modal" class="btn btn-danger float-end"><i class="bi bi-trash3"></i></a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Delete Customer address Modal HTML -->
+<div id="delModal" class="modal fade" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h6class="modal-title">확인</h6>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <p> 배송지 {{address.address}} 삭제하겠습니까?</p>
+                <p class="text-secondary"><small></small></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">나가기</button>
+                <a href="{% url 'storeman:delete_customer_address' customer.id address.id %}"><button type="button"
+                    class="btn btn-primary">삭제하기</button></a>
+                </div>
+            </div>
+        </div>
+</div>
+<!--End Modal-->
+{% endblock content %}

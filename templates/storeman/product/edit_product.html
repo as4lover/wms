@@ -1,0 +1,190 @@
+{% extends '../admin_base.html' %}
+{% load widget_tweaks %}
+{% load crispy_forms_tags %}
+{% block content %}
+<div class="container p-2">
+    <div class="row">
+        <div class="col">
+            <div class="card">
+                <div class="card-header">
+                    <span class="text-dark fs-4 fw-bold">{{product.title}}<a href="{% url "storeman:product_list" %}" class="btn btn-info float-end">뒤로가기</a></span>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <img src="{{product.image.url}}" class="rounded img-fluid" style="height: 150px;"
+                            alt="image">
+                        </div>
+                        <div class="col-md-8">
+                            <table class="table table-hover">
+                                <tbody>
+                                    <tr>
+                                        <th>영문명</th>
+                                        <td>{{product.e_title|upper}}</td>
+                                        <th>제조사</th>
+                                        <td>{{product.brand}}</td>
+                                    </tr>
+                                    <tr>
+                                        <th>카테고리</th>
+                                        <td>{{product.category}}</td>
+                                        <th>태그</th>
+                                        <td>{{product.tag}}</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Unit</th>
+                                        <td>{{product.unit}}</td>
+                                        <th>Spec</th>
+                                        <td>{{product.spec}}</td>
+                                    </tr>
+                                    <tr>
+                                        <th>박스당갯수</th>
+                                        <td>{{product.per_box}}</td>
+                                        <th>재고수량</th>
+                                        <td>{{product.quantity}}</td>
+                                    </tr>
+                                    <tr>
+                                        <th>창고위치</th>
+                                        <td>{{product.location|upper}}</td>
+                                        <th>바코드</th>
+                                        <td>{{product.bar_code}}</td>
+                                    </tr>
+                                    
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+    </div>
+    <div class="raw mt-3">
+        <div class="card">
+            <div class="card-header text-center">
+                <h5>제품수정</h5>
+            </div>
+            <div class="card-body">
+                <form method="POST" enctype="multipart/form-data">
+                    <div class="row">
+                        {% csrf_token %}
+                        <div class="col-md-6">
+                            <label for="">한글명</label>
+                            {% render_field form.title placeholder="한글제품명" class+="form-control" %}
+                            {{form.title.errors}}
+                        </div>
+                        <div class="col-md-6">
+                            <label for="">영문명</label>
+                            {% render_field form.e_title placeholder="영문제품명" class+="form-control" %}
+                            {{form.e_title.errors}}
+                        </div>
+                    </div>
+                    <div class="row py-2">
+                        <div class="col-md-4">
+                            <label for="">카테고리</label>
+                            {% render_field form.category placeholder="제품카테고리" class+="form-control" %}
+                            {{form.e_category.errors}}
+                        </div>
+                        <div class="col-md-4">
+                            <label for="">바코드</label>
+                            {% render_field form.bar_code placeholder="바코드" class+="form-control" %}
+                            {{form.bar_code.errors}}
+                        </div>
+                        <div class="col-md-4">
+                            <label for="">창고위치</label>
+                            {% render_field form.location placeholder="창고위치" class+="form-control" %}
+                            {{form.location.errors}}
+                        </div>
+                    </div>
+                    <div class="row py-2">
+                        <div class="col-md-4">
+                            <label for="">Unit</label>
+                            {% render_field form.unit placeholder="단위" class+="form-control" %}
+                            {{form.unit.errors}}
+                        </div>
+                        <div class="col-md-4">
+                            <label for="">Spec</label>
+                            {% render_field form.spec placeholder="규격" class+="form-control" %}
+                                {{form.spec.errors}}
+                           </div>
+                           <div class="col-md-4">
+                               <label for="">박스당갯수</label>
+                               {% render_field form.per_box placeholder="박스당겟수" class+="form-control" %}
+                               {{form.per_box.errors}}
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-2">
+                                <label for="">가격</label>
+                                {% render_field form.list_price placeholder="가격" class+="form-control" %}
+                                {{form.list_price.errors}}
+                            </div>
+                            <div class="col-md-2">
+                                <label for="">판매가격</label>
+                                {% render_field form.sale_price placeholder="판매가격" class+="form-control" %}
+                                {{form.sale_price.errors}}
+                            </div>
+                            <div class="col-md-2">
+                                <label for="">수량</label>
+                                {% render_field form.quantity placeholder="수량" class+="form-control" %}
+                                {{form.quantity.errors}}
+                            </div>
+                            <div class="col-md-2">
+                                <label for="">제조사</label>
+                                {% render_field form.brand placeholder="제조사" class+="form-control" %}
+                                {{form.brand.errors}}
+                            </div>
+                            <div class="col-md-2">
+                                <label for="">컬러</label>
+                                {% render_field form.color placeholder="컬러" class+="form-control" %}
+                                {{form.color.errors}}
+                            </div>
+                            <div class="col-md-2">
+                                <label for="">태그</label>
+                                {% render_field form.tag placeholder="제품태그" class+="form-control" %}
+                                {{form.tag.errors}}
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 py-2">
+                                {{form.description|as_crispy_field}}
+                                {{form.description.errors}}
+                            </div>
+                            <div class="col-md-6 py-2">
+                                {{form.image|as_crispy_field}}
+                                {{form.image.errors}}
+                                {{form.is_active|as_crispy_field}}
+                                {{form.is_active.errors}}
+                            </div>
+                            
+                            <div class="card-footer p-2 bg-warning bg-opacity-10">
+                            <button type="submit" class="btn btn-success float-start">업데이트</button>
+                            <a href="#delModal" class="btn btn-danger float-end" float-end roll="button" data-bs-toggle="modal">삭제</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+</div>
+<!--Modal-->
+<div id="delModal" class="modal fade" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h6class="modal-title">확인</h6>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <p>선택한 "{{product.title}} " 제품을 삭제하겠습니까?</p>
+                <p class="text-secondary"><small></small></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">나가기</button>
+                <a href="{% url 'storeman:delete_product' product.id %}" ><button type="button"
+                        class="btn btn-primary">삭제하기</button></a>
+            </div>
+        </div>
+    </div>
+</div>
+<!--End Modal-->
+
+{% endblock content %}

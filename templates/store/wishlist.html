@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+{% load i18n %}
+{% block content %}
+<!-- Card-->
+<main>
+    <div class="container bg-trasparent my-4 wishlist-container" style="position: relative;">
+        <h3 class="mt-1"><i class="fa-regular fa-star" style="color:orange;"></i> {{ _('Favorite order list') }}</h3>
+        <hr>
+        {% if wish_items|length == 0 %}
+        <div class="alert alert-danger text-center" role="alert">
+            <p>즐겨찾기가 비어있습니다.!!</p>
+            <p>자주 주문하는 제품들을 <strong>"즐겨찾기"</strong>에 담아놓으면, 주문이 더 빨라집니다.</p>
+        </div>
+        {% endif %}
+        <div class="wishdata">
+            <div class="row row-cols-1 row-cols-xs-2 row-cols-sm-2 row-cols-lg-4 g-3">
+                {% for item in wish_items %}
+                <div class="col-6">
+                    <div class="card h-100 shadow-sm product_data1">
+                        <a href="{% url 'store:product_detail' item.product.category.slug item.product.id %}">
+                            <img src="{{item.product.image.url}}" class="card-img-top" alt="Product_image">
+                            <div class="label-top shadow-sm"><span class="fa-stack">
+                                <i class="fa fa-star fa-stack-2x"></i>
+                                <strong class="fa-stack-1x text-black">{{forloop.counter}}</strong>
+                              </span>
+                            </div>
+                            <div class="card-body text-center" style="height: 7rem;">
+                                   <h5 class="card-title">{{item.product.title}}<br>
+                                    <span class="text-muted" style="font-size:0.7rem;">{{item.product.e_title}}</span></h5>
+                            </div>
+                        </a>
+                        <div class="text-center my-2 product_data">
+                            <div class="row">
+                                <input type="hidden" class="prod_id" id='cart-content' value="{{item.product.id}}">
+                                <div class="col-md-6 p-1">
+                                         <button type="button" class="btn btn-danger btn-sm delete_wish_item">
+                                        {{_('Delete')}} <i class="bi bi-trash"></i></button>
+                                </div>
+                                <div class="col-md-6 p-1">
+                                        <button type="button" class="btn btn-info btn-sm wishToCartBtn" data-item-id="{{ item.product.id }}">
+                                         {{_('Order')}} <i class="bi bi-bag"></i></button>
+                                </div>
+                            </div>
+                        </div>                
+                    </div>                        
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+</main>
+{% endblock %}

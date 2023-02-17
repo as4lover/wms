@@ -1,0 +1,78 @@
+{% extends './admin_base.html' %}
+{% block content %}
+
+<div class="container p-2">
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>고객명</th>
+                <th>주문번호</th>
+                <th>연락처</th>
+                <th>배송지</th>
+                <th>배송상태</th>
+                <th>고객전달사항</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>{{ order.company_name }}</td>
+                <td>{{order.tracking_no}}</td>
+                <td>{{order.phone}}</td>
+                <td>
+                    {{ order.address}},
+                    {{ order.city}},
+                    {{ order.postcode}}
+                </td>
+                <td>{{ order.status}}</td>
+                <td>{{order.message}}</td>
+            </tr>
+        </tbody>
+
+    </table>
+</div>
+
+<div class="container mt-3">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card shadow">
+                <div class="card-header">
+                    <a href="{% url 'storeman:order_list' %}" class="btn btn-warning float-end"><i
+                            class="bi bi-reply"></i></a>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <table class="table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>제품명</th>
+                                        <th>제품코드</th>
+                                        <th>수 량</th>
+                                        <th>창고위치</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for item in orderitems %}
+                                    <tr>
+                                    <tr>
+                                        <td>{{forloop.counter}}</td>
+                                        <td>{{ item.product.title}}({{item.product.e_title}})</td>
+                                        <td>{{ item.product.bar_code}}</td>
+                                        <td>{{ item.quantity}}</td>
+                                        <td>{{ item.product.location}}</td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+{% endblock content %}

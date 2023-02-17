@@ -1,0 +1,53 @@
+{% extends "../admin_base.html" %}
+{% load widget_tweaks %}
+{% block content %}
+
+<div class="container">
+            <!--Start search-->
+        {% comment %} <form action="{% url 'store:searchproducts' %}" method="POST">
+          {% csrf_token %}
+          <div class="col-sm-12">
+            <div class="input-group me-auto">
+              <input type="search" required class="form-control ms-2" name="productsearch" id="searchproducts"
+                placeholder="Global Search...">
+              <button type="submit" class="input-group-text "><i class="bi bi-search"></i></button>
+            </div>
+          </div>
+        </form> {% endcomment %}
+        <!--End Search-->
+    <div class="align-baseline py-3">
+        <a href="{% url "storeman:create_customer" %}" class="btn btn-primary"><i class="bi bi-plus"></i> 고객등록</a>
+    </div>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>사용자명</th>
+                <th>고객명</th>
+                <th>이메일</th>
+                <th>연락처</th>
+                <th>최근접속</th>
+            </tr>
+        </thead>
+        <tbody id="customer_Tbody">
+            {% for customer in page_obj %}
+            <tr>
+                <td>{{forloop.counter}}</td>
+                <td>
+                    <a href="{% url 'storeman:display_customer_details' customer.id %}">
+                        {{customer.username}}
+                    </a>
+                </td>
+                <td>{{customer.last_name}}{{customer.first_name}}</td>
+                <td>{{customer.email}}</td>
+                <td>{{customer.phone}}</td>
+                <td>{{customer.last_login}}</td>
+
+            </tr>
+            {% endfor %}
+
+        </tbody>
+    </table>
+</div>
+{% include "../../pagination.html"%}
+{% endblock %}

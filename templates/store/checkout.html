@@ -1,0 +1,104 @@
+{% extends 'base.html' %}
+{% load i18n %}
+{% block content %}
+<div class="container mt-3">
+    <div class="row">
+        <div class="col-md-7">
+            <div class="card shadow">
+                <div class="card-body">
+                    <i class="fa-solid fa-truck-fast"></i> </h5>{{_(' Delivery to')}}: {{company.h_name}}({{company.e_name}}) <span class="text-primary">{{company.address}}, {{company.city}}</span></h5>
+                    <hr>
+                    <p>{% trans 'Choose your location' %}</p>
+                    <div class="row p-1">
+                        {% for addr in addressbook %}
+                        <div class="col-6 col-md-auto">
+                        <div class='card me-1 mt-2 {% if addr.default %}shadow bg-warning bg-opacity-10 {% else %} text-muted {% endif %}' style="width:140px;"> 
+                            <div class="card-body">
+                                <div class="card-title">{{addr.e_name}}</div>
+                                <div class="card-text" style="font-size:0.8rem;">{{addr.nick_name}}
+                                    <br>
+                                    {{addr.address}},{{addr.city}}
+                                    {% if addr.default %}
+                                    <p class="text-bg-danger text-danger text-center">{{_('Default Address')}}</p>
+                                    <div class="card-footer d-flex justify-content-center bg-opacity-10">
+                                    <i class="fa-regular fa-circle-check fa-2x text-danger"></i> 
+                                    </div>
+                                    {% else %}
+                                    <div class="card-footer bg-white d-flex justify-content-center">
+                                    <a href="{% url 'company:set_default' addr.id %}">
+                                    <i class="fa-regular fa-hand-pointer"></i> {{_('Select')}}
+                                    </a>
+                                    </div>                                              
+                                    {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                <div class="p-2">
+<form action="{% url 'store:place_order' %}" method="POST">
+                            {% csrf_token %}
+                            <div class="col-md-12 mt-2">
+                                <P><strong>{{_('Do you have a message')}}?</strong>
+                                    <P>
+                                        <textarea type='text' value="{{ message }}" class='form-control' name='message'
+                                        placeholder="{{_('Please write here')}}..."></textarea>
+                            </div>
+                        </div>
+                    </div>
+        </div>
+        <!--오더정보-->
+        <div class="col-md-5">
+            <div class="card shadow">
+                <div class="cart-body">
+                    <h5 class="ms-2 mt-3"><i class="fas fa-shopping-cart"></i> {{_("Order List")}}</h5>
+                    <hr>
+                    {% if cart_items %}
+                    <table class="table table-stripeds table-bordereds text-start table-responsive" style="font-size:0.8rem;">
+                        <thead>
+                            <tr>
+                                <th>{{_('Product')}}</th>
+                                <th>{{_('Qty')}}</th>
+                                <th>{{_('Spec')}}</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for item in cart_items %}
+                            <tr>
+                                <td>{{ item.product.title}}<br>{{item.product.e_title}}</td>
+                                <td>{{ item.product_qty}}</td>
+                                <td>{{ item.product.spec}}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                    <div class="p-2 d-flex justify-content-center">
+                        {% comment %} <a href="#myModal" type="submit" value="Submit" name="submit" class="btn btn-primary" data-bs-toggle="modal">Submit</a> {% endcomment %}
+                    <button class="btn btn-primary" type="submit" name="submit" value="Submit" data-bs-toggle="modal" data-bs-target="#myModal">{{_('Proceed to Checkout')}}</button>
+                    </div>
+                    {% else %}
+                    <h5 class="p-2">{% trans "Empty Order List" %}...</h5>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+</div>
+<!-- Modal -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-body center-block">
+          <div class="progress">
+            <div class="progress-bar bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
+              
+            </div>
+          </div>
+        </div>
+      </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog --> 
+  </div><!-- /.modal -->
+{% endblock content %}

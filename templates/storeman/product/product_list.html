@@ -1,0 +1,87 @@
+{% extends '../admin_base.html' %}
+{% block content %}
+{% load widget_tweaks %}
+{% load crispy_forms_tags %}
+<div class="container p-2">
+    <div class="card">
+        <div class="card-body">
+            <div class="row">
+                <div class="d-flex justify-content-end">
+                    <form>
+                            <div class="row">
+                            <div class="col-auto">
+                                <p>제품명(한글)</p>
+                            </div>
+                            <div class="col-auto">
+                                {% render_field product_filter.form.title__icontains class="form-control" %}
+                            </div>
+                            <div class="col-auto">
+                                <p>제품명(영문)</p>
+                            </div>
+                            <div class="col-auto">
+                                {% render_field product_filter.form.e_title__icontains class+="form-control" %}
+                            </div>
+                            <div class="col-auto">
+                                <span>카테고리</span>
+                            </div>
+                            <div class="col-auto">
+                                {% render_field product_filter.form.category  type="search" class="form-control" %}
+                            </div>
+                            <div class="col-auto">
+                                <p>판매상태</p>
+                            </div>
+                            <div class="col-auto">
+                                {% render_field product_filter.form.is_active class="form-control" %}
+                            </div>
+                            <div class="col-auto">
+                                <button class="btn btn-primary" type="submit">Search</button>
+                            </div>
+                        </div>
+
+                        </form>
+                </div>
+            </div>
+        </div>
+    </div>
+<div class="card p-2 mt-2">
+    <div class="card-body">
+        <table class="table table-hover">
+            <thead class="bg-dark text-light">
+                <tr>
+                    <th>#</th>
+                    <th>제품명(한글)</th>
+                    <th>제품명(Eng)</th>
+                    <th>창고위치</th>
+                    <th>UNIT</th>
+                    <th>SPEC</th>
+                    <th>BOX당갯수</th>
+                    <th>상태</th>
+                    <th>비고</th>
+                </tr>
+            </thead>
+        <tbody class="align-middle">
+            {% for product in page_obj %}
+            <tr>
+                <td>{{forloop.counter}}</td>
+                <td>{{product.title}}</td>
+                <td>{{product.e_title}}</td>
+                <td>{{product.location}}</td>
+                <td>{{product.unit}}</td>
+                <td>{{product.spec}}</td>
+                <td>{{product.per_box}}</td>
+                <td>{{product.is_active|yesno:"판매중,판매중단"}}</td>
+                <td>
+                    <a href="{% url 'storeman:edit_product' product.id %}"><button type="button"
+                        class="btn btn-warning me-3"><i class="bi bi-pencil"></i></button></a>
+                    </td>
+                </tr>
+                {% endfor %}
+                
+            </tbody>
+        </table>
+    </div>
+    {% include "../../pagination.html"%}
+</div>
+</div>
+
+{% endblock content %}

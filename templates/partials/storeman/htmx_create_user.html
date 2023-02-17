@@ -1,0 +1,112 @@
+{% load widget_tweaks %}
+<!--Error-->
+{% if form.errors %}
+<div class="alert alert-info" role="alert">
+  에러: 사용자명 또는 비빌번호가 잘못되었습니다!
+</div>
+{% endif %}
+<!--End of Error -->
+<form method="POST" hx-post='.' hx-swap='outerhtml'>
+    {% csrf_token %}
+    {% if messgae %}
+    <p>{{message}}</p>
+    {% endif %}
+<div class="card">
+    <div class="card-body">
+        <div class="row">
+                <div class="col-md-4">
+                    <label class="form-label">사용자ID</label>
+                    {% render_field form.username placeholder="사용자ID" class+="form-control" hx-post="/storeman/check_username/" hx-swap="outerhtml" hx-trigger="keyup" hx-target="#username-error" %}
+                    <div id="username-error"></div>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label mt-1">이름</label>
+                    {% render_field form.first_name placeholder="이름" class+="form-control" %}
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label mt-1">성명</label>
+                    {% render_field form.last_name placeholder="성명" class+="form-control" %}
+                </div>
+
+        </div>
+        <div class="row">   
+                <div class="col-md-3">
+                    <label class="form-label mt-1">이메일주소</label>
+                    {% render_field form.email placeholder="이메일주소" class+="form-control" %}
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label mt-1">전화번호</label>
+                    {% render_field form.phone placeholder="전화번호" class+="form-control" %}
+                </div>
+                <div class="col-md-3">
+                <label class="form-label mt-1">비밀번호</label>
+                {% render_field form.password1 placeholder="비밀번호" class+="form-control" %}
+                </div>
+                <div class="col-md-3">
+                <label class="form-label mt-1">비밀번호확인</label>
+                {% render_field form.password2 placeholder="비밀번호확인" class+="form-control" %}
+                </div>
+        </div>
+    </div>
+</div>
+        {% if formset %}
+        <div class="mt-2">
+        <h5>주소등록</h5>
+        </div>
+        {{ formset.management_form }}
+        {% for form_data in formset  %}
+        <div class="card mt-1">
+            <div class="card-body">
+            <div class="row">
+                <div class="d-grid d-md-flex gap-2 justify-content-md-end">
+                    <label class="form-check-label" for="default">기본배송지설정
+                        {% render_field form_data.default %}
+                    </label>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">별칭</label>
+                    {% render_field form_data.nick_name placeholder="본점/지점명" class+="form-control" %}
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">한글상호명</label>
+                    {% render_field form_data.h_name placeholder="한글상호명" class+="form-control" %}
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">영문상호명</label>
+                    {% render_field form_data.e_name placeholder="영문상호명" class+="form-control" %}
+                </div>
+            </div>
+            <div class="row mt-2">
+                <div class="col-md-4">
+                    <label class="form-label">주소</label>
+                    {% render_field form_data.address placeholder="주소" class+="form-control" %}
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">시티</label>
+                    {% render_field form_data.city type="select" class+="form-control" %}
+                </div>
+                <div class="col-md-2">
+                    <label class="form-label">주</label>
+                    {% render_field form_data.state type="select" class+="form-control" %}
+                </div>
+                <div class="col-md-2">
+                    <label class="form-label">우편번호</label>
+                    {% render_field form_data.postcode placeholder="우편번호" class+="form-control" %}
+                </div>
+            </div>
+            <div class="row mt-2">
+                <div class="col-md-6">
+                    <label class="form-label">배송방법</label>
+                    {% render_field form_data.delivery_instructions placeholder="배송방법" class+="form-control" %}
+                </div>
+            </div>
+        </div>
+        </div>
+        {% endfor %}
+        {% endif %}
+
+        <div class="p-2 d-grid gap-4 d-md-flex justify-content-md-end">
+            <button class="btn btn-sm btn-warning" id="add-more" type='button'>Add More</button>
+            <button class="btn btn-sm btn-success" type="submit">Submit</button>
+        </div>
+</form>

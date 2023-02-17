@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+<div class="py-3 mt-3">
+    <div class="container">
+        <a class="text-black" href="{% url 'store:home' %}">홈 /</a>
+        <a class="text-black" href="{% url 'store:myorders' %}">나의주문내역</a>
+    </div>
+</div>
+<main class="container my-4">
+    <h3 class="my-4 border-bottom pb-1">배송지등록/수정</h3>
+    {% if msg %}
+    <p class="text-success">{{ msg }}</p>
+    {% endif %}
+    <table class="table table-bordered">
+        <form method="post">
+            {% csrf_token %}
+            {{form.as_table}}
+            <tr>
+                <td colspan="2">
+                    <input type="submit" value="Save" class="btn btn-primary" />
+                </td>
+            </tr>
+        </form>
+    </table>
+</main>
+{% endblock content %}

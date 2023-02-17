@@ -1,0 +1,89 @@
+{% extends '../admin_base.html' %}
+
+{% block content  %}
+<div class="container p-3">
+    <div class="align-baseline">
+        <a href="{% url 'storeman:create_customer_address' customer.id %}" class="btn btn-info"><i
+                class="bi bi-plus"></i> 배송지추가</a>
+        <a href="{{request.META.HTTP_REFERER|escape}}" class="btn btn-info float-end"><i
+                class="fa-solid fa-left-long"></i> 이전</a>
+    </div>
+    <table class="table table-bordered border-primary mt-2">
+        <thead>
+            <tr>
+                <th>사용자ID</th>
+                <th>담당자명</th>
+                <th>연락처</th>
+                <th>이메일</td>
+                <th>실행</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>{{customer.username}}</td>
+                <td>{{customer.last_name}} {{customer.first_name}}</td>
+                <td>{{customer.phone}}</td>
+                <td>{{customer.email}}</td>
+                <td>
+                    <a href="{% url "storeman:edit_customer" customer.id %}" class="btn btn-sm btn-warning float-start"><i class="bi bi-pencil"></i></a>
+                    <a href="#delModal" roll="button" data-bs-toggle="modal" class="btn btn-sm btn-danger float-end"><i class="bi bi-trash3"></i></a>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+<!--card start-->
+<div class="row">
+    {% for addr in address %}
+    <div class="col-6">
+        <div class='card mt-1'>
+            <div class="card-header">
+                <p>#{{forloop.counter}} 배송지명: {{ addr.h_name }}({{addr.e_name}})<span class="float-end">{{addr.nick_name}}</span></p>
+            </div>
+            <div class="card-body">
+                <p>주소: {{addr.address}}, {{addr.city}}, {{addr.postcode}} {{addr.state}} {{addr.id}}</p>
+                <p>기본배송지: {{addr.default}}</p>
+                <p>배송방법: {{addr.delivery_instructions}}</p>
+                <p>주문코드: 일반 - {{addr.gen_code}} , 야채 - {{addr.vegi_code}} </p>
+            </div>
+            <div class="card-footer">
+                <a href="{% url 'storeman:edit_customer_address' customer.id addr.id %}" class="btn btn-warning"><i class="bi bi-pencil"></i></a>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+    {% for code in order_code %}
+    <p>주문코드:{{code.code}}</p>
+    {% endfor %}
+</div>
+<!--card end -->
+
+
+
+</div>
+
+<!-- Delete Customer Modal HTML -->
+<div id="delModal" class="modal fade" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h6class="modal-title">확인</h6>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <p>고객 {{customer.username}} 삭제하겠습니까?</p>
+                <p class="text-secondary"><small></small></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">나가기</button>
+                <a href="{% url 'storeman:delete_customer' customer.id %}"><button type="button"
+                        class="btn btn-primary">삭제하기</button></a>
+            </div>
+        </div>
+    </div>
+</div>
+<!--End Modal-->
+
+
+
+
+{% endblock %}

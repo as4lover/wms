@@ -1,0 +1,62 @@
+{% extends './delivery_base.html' %}
+
+{% block content %}
+
+{% if request.user.is_staff %}
+<div class="container-sm container-fluid">
+  <h6 class="text-center">{{order.company_name}}: {{order.tracking_no}}</h6>
+    <div class="row">
+        <div class="col-6-sm">
+<div class="table-responsive-sm">
+<table class="table text-center">
+  <thead>
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">품목</th>
+      <th scope="col">수량</th>
+      <th scope="col">상태</th>
+      
+   </tr>
+  </thead>
+  <tbody>
+    {% for item in orderitems %}
+    <tr>
+      <td>{{ forloop.counter}}</td>
+      <td>{{ item.product.title}}</td>
+      <td>{{ item.quantity}}</td>
+      <td>{{ item.item_status }}</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+</div>
+       </div>
+<div>
+<form action="" method="POST">
+  {% csrf_token %}
+  {{form.delivery_note.label_tag}}
+  {{form.delivery_note}}
+  <br>
+  {{form.status.label_tag}} 
+  {{form.status}}
+  <br>
+  <div class="card border-0 p-2">
+    <div class="card-body">
+      <div class="row">
+        <div class="col-6">
+          <button type="submit" class="btn btn-sm btn-warning float-start" name="Submit">확인</button>
+        </div>
+        <div class="col-6">
+          <a href="{% url "delivery:delivery_home" %}?next={{ request.path|urlencode }}" class="btn btn-sm btn-primary float-end">취소</a>
+        </div>
+        </div>
+    </div>
+  </div>
+</form>
+</div>
+
+    </div>
+</div>
+{% endif %}
+{% endblock content %}

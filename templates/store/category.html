@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="container">
+    <div class="row row-cols-1 row-cols-xs-2 row-cols-sm-2 row-cols-lg-4 g-3 infinite-container">
+        {% for c in categories %}
+        <div class="col-6 col-md-4">
+            <div class="card h-100 shadow-sm">
+
+                <a href="{% url 'store:product_list' c.slug %}">
+                    <div class="card-body">
+                        <div class="category-image">
+                            <img src="{{c.image.url}}" alt="category image" class="w-100 card-img-top">
+                        </div>
+                        <H4 class="text-center">{{c.title}}</h4>
+                    </div>
+                </a>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock content %}
+
+<!--
+{% if c.title == "야채" %}
+<div class="alert alert-danger" role="alert">
+<h5 class="text-center">야채 주문은 <strong>오후 5시전</strong>까지만 받습니다.</h5>
+</div>
+{% endif %}
+-->

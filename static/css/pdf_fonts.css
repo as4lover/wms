@@ -1,0 +1,21 @@
+{% load static %}
+@font-face {
+    font-family: "Calibri";
+    src: url({% static "fonts/NanumGothic.ttf" %});
+}
+@font-face {
+    font-family: "Calibri";
+    src: url({% static "fonts/NanumGothic" %});
+    font-weight: bold;
+}
+@font-face {
+    font-family: "Calibri";
+    src: url({% static "fonts/NanumGothic.ttf" %});
+    font-style: italic, oblique;
+}
+@font-face {
+    font-family: "Calibri";
+    src: url({% static "fonts/NanumGothic.ttf" %});
+    font-weight: bold;
+    font-style: italic, oblique;
+}

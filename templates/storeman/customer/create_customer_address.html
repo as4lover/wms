@@ -1,0 +1,27 @@
+{% extends '../admin_base.html' %}
+{% load crispy_forms_tags %}
+{% load widget_tweaks %}
+{% block content  %}
+<div class="container">
+   <form method="POST">
+      {% csrf_token %} 
+      {{ formset.management_form}}
+      {% for form in formset %}
+      <div class="card mt-2">
+         <div class="card-header">
+            주소 # {{forloop.counter}}
+         </div>
+         <div class="card-body">
+            {{form|crispy}}
+         </div>
+         
+         <div class="card-footer p-2 mt-2">
+            <button class="btn btn-info" type="submit">등록</button>
+         </div>
+      </div>
+      {% endfor %}
+   </form>
+      
+
+</div>
+{% endblock %}

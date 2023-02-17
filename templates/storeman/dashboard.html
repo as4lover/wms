@@ -1,0 +1,122 @@
+{% extends "./admin_base.html" %}
+{% block content %}
+<div class="container">
+    <h4 class="text-center text-border">상황판</h4>
+    <div class="row">
+        <div class="col-xl-12 col-md-8 col-lg-9 ml-auto">
+            <div class="row row-cols-1 row-cols-sm2 row-cols-md-3">
+                <!--Start card -->
+                <div class="col-xl-4 col-sm-3">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between">
+                                <i class="fa fa-truck-loading fa-3x text-warning"></i>
+                                <div class="text-center">
+                                    <h5>배송준비</h5>
+                                    <h3>{{pending_order}}</h3>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-footer text-secondary">
+                            <i class="fas fa-sync mr-3"></i>
+                            <a href="{% url 'storeman:admin_home' %}">
+                                <span>Update now</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <!--end of card-->
+                <!--Start card -->
+                <div class="col-xl-4 col-sm-3">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between">
+                                <i class="fa fa-truck fa-3x" style="color:blue"></i>
+                                <div class="text-center">
+                                    <h5>배송시작</h5>
+                                    <h3>{{on_delivery}}</h3>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-footer text-secondary">
+                            <i class="fas fa-sync mr-3"></i>
+                            <span>Update now</span>
+                        </div>
+                    </div>
+                </div>
+                <!--end of card-->
+                <!--Start card -->
+                <div class="col-xl-4 col-sm-3">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between">
+                                <i class="fas fa-check fa-3x" style="color:red"></i>
+                                <div class="text-center">
+                                    <h5>배송완료</h5>
+                                    <h3>{{delivered}}</h3>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-footer text-secondary">
+                            <i class="fas fa-sync mr-3"></i>
+                            <span>Update now</span>
+                        </div>
+                    </div>
+                </div>
+                <!--end of card-->
+            </div>
+        </div>
+    </div>
+    <!--Menu-->
+            <!--Order List-->
+            <div class="row mt-2">
+                <div class="col-md-12">
+                    <div class="card shadow">
+                        <div class="card-header">
+                            <h4 class="mb-0 text-center">오늘주문내역</h4>
+                        </div>
+                        <div class="card-body">
+                            <table class="table">
+
+                                <thead>
+                                    <tr class="table-light text-center">
+                                        <th>#</th>
+                                        <th>고객명</th>
+                                        <th>주문날자</th>
+                                        <th>주문번호</th>
+                                        <th>주문상황</th>
+                                        <th>배송담당자</th>
+                                        <th>보기</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for item in page_obj  %}
+                                    <tr class="text-center">
+                                        <td>{{forloop.counter}}</td>
+                                        <td>{{ item.company_name}}</td>
+                                        <td>{{ item.created_at}}</td>
+                                        <td>{{ item.tracking_no}}</td>
+                                        <td>{{ item.status}}</td>
+                                        <td>{{ item.representative|default_if_none:""|capfirst }}</td>
+                                        <td>
+                                            <a href="{% url 'storeman:order_details' item.tracking_no %}"
+                                                class="btn btn-danger">자세히</a>
+                                            <a href="{{ item.ami_file.url }}" class="btn btn-warning">알맹이 CSV</a>
+                                            <a href="{{ item.order_pdf.url }}" class="btn btn-info">주문서 PDF</a>
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                            <!--pagination-->
+                            <br><br>
+                            {% include "../pagination.html"%}
+
+                            <!--end of pagination-->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {% endblock content %}
