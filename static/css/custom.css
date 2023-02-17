@@ -293,7 +293,7 @@ h2 {
     margin: 1px;
     display: inline-block;
     overflow: hidden;
-    -o-object-fit: cover; 
+    object-fit: cover; 
 }
 
 @media (max-width: 370px) {
