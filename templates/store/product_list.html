@@ -3,54 +3,24 @@
 {% load static %}
 {% block content %}
 <div class="container bg-trasparent my-4" style="position: relative;">
-            <h3 class>{{ category.title }}({{category.e_title}})</h3>
-            <hr>
-            <div class="row row-cols-1 row-cols-xs-2 row-cols-sm-2 row-cols-lg-4 g-3 infinite-container">
-                {% for product in page_obj %}
-                <div class="col-6 infinite-item">
-                    <div class="card h-100 shadow-sm">
-                        <a href="{% url 'store:product_detail' product.category.slug product.id %}">
-                            <img src="{{product.image.url}}" class="card-img-top rounded-bottom" alt="Product_image">
-                            <div class="card-body text-center">
-                                <h5 class="card-title">{{product.title}}<br>
-                                <span class="text-muted" style="font-size:0.7rem;">{{product.e_title}}<br>SKU:{{product.bar_code}}</span></h5>
-                            </div>
-                        </a>
+    <h3 class>{{ category.title }}({{category.e_title}})</h3>
+    <hr>
+    <div class="row row-cols-1 row-cols-xs-2 row-cols-sm-2 row-cols-lg-4 g-3 infinite-container">
+        {% for product in products %}
+        <div class="col-6 infinite-item">
+            <div class="card h-100 shadow-sm">
+                <a href="{% url 'store:product_detail' product.category.slug product.id %}">
+                    <img src="{{product.image.url}}" class="card-img-top rounded-bottom" alt="Product_image">
+                    <div class="card-body text-center">
+                        <h5 class="card-title">{{product.title}}<br>
+                            <span class="text-muted"
+                                style="font-size:0.7rem;">{{product.e_title}}<br>SKU:{{product.bar_code}}</span></h5>
                     </div>
-                </div>
-                {% endfor %}
+                </a>
             </div>
-            <div class="d-flex d-none position-fixed" style="top:35vh;left:46vw">
-                <div class="spinner-grow loading" style="width: 3rem; height: 3rem;" role="status">
-                    <span class="visually-hidden">Loading...</span>
-                  </div>
-            </div>
-            <div class="row">
-                <div class="col-12">
-                    {% if page_obj.has_next %}
-                    <a class="infinite-more-link" href="?page={{ page_obj.next_page_number }}">next</a>
-                    {% endif %}
-                </div>
-            </div>  
-
-
         </div>
-
-
-<script>
-    var infinite = new Waypoint.Infinite({
-        element: $('.infinite-container')[0],
-
-        offset: 'bottom-in-view',
-
-        onBeforePageLoad: function () {
-            $('.loading').show();
-        },
-        onAfterPageLoad: function () {
-            $('.loading').hide();
-        }
-
-    });
-</script>
+        {% endfor %}
+    </div>
+</div>
 
 {% endblock content %}

@@ -40,20 +40,8 @@ def product_list(request, slug):
     if Category.objects.filter(slug=slug):
         products = Product.objects.filter(category__slug=slug, is_active=True)
         category = Category.objects.filter(slug=slug).first()
-        # Set up Pagination
-        page_num = request.GET.get("page", 1)
-        paginator = Paginator(products, 8)
-        try:
-            page_obj = paginator.page(page_num)
-        except PageNotAnInteger:
-            page_obj = paginator.page(1)
-        except EmptyPage:
-            page_obj = paginator.page(paginator.num_pages)
-
-        page_num_counter = "a" * page_obj.paginator.num_pages
         context = {
-            "page_obj": page_obj,
-            "page_num_counter": page_num_counter,
+            "products": products,
             "category": category,
         }
         return render(request, "store/product_list.html", context)
