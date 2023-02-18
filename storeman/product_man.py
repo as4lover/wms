@@ -34,6 +34,7 @@ def product_list(request):
     custom_range = range(lefIndex, rightIndex)
 
     context = {
+        "page_num": page_num,
         "products_qs": products_qs,
         "page_obj": page_obj,
         "paginator": paginator,

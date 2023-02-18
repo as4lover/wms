@@ -50,11 +50,11 @@ def delete_customer(request, pk_id):
 def display_customer_list(request):
     if not request.user.is_staff | request.user.is_superuser:
         return redirect("/login")
-    customers = User.objects.filter(is_staff=False, is_superuser=False).order_by(
-        "date_joined"
-    )
+    customers = AddressBook.objects.filter(
+        user__is_staff=False, user__is_superuser=False, default=True
+    ).order_by("user__last_login")
     page = request.GET.get("page", 1)
-    paginator = Paginator(customers, 5)
+    paginator = Paginator(customers, 10)
     try:
         page_obj = paginator.page(page)
     except PageNotAnInteger:
