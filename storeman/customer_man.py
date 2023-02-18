@@ -52,7 +52,7 @@ def display_customer_list(request):
         return redirect("/login")
     customers = AddressBook.objects.filter(
         user__is_staff=False, user__is_superuser=False, default=True
-    ).order_by("user__last_login")
+    ).order_by("-user__last_login")
     page = request.GET.get("page", 1)
     paginator = Paginator(customers, 10)
     try:
