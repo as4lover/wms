@@ -313,10 +313,9 @@ msgstr "제조사"
 msgid "Favorite order list"
 msgstr "즐겨찾기상품"
 
-#, fuzzy
-#~| msgid "English"
+
 #~ msgid "English Title"
-#~ msgstr "영어"
+#~ msgstr "영문제목"
 
 #~ msgid "BAR Code"
 #~ msgstr "바코드"
