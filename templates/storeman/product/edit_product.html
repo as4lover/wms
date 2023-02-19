@@ -60,8 +60,10 @@
     </div>
     <div class="raw mt-3">
         <div class="card">
-            <div class="card-header text-center">
+            <div class="card-header">
                 <h5>제품수정</h5>
+                <button type="submit" class="btn btn-success float-start">업데이트</button>
+                <a href="#delModal" class="btn btn-danger float-end" roll="button" data-bs-toggle="modal">삭제</a>
             </div>
             <div class="card-body">
                 <form method="POST" enctype="multipart/form-data">
@@ -155,11 +157,6 @@
                                 {{form.is_active|as_crispy_field}}
                                 {{form.is_active.errors}}
                             </div>
-                            
-                            <div class="card-footer p-2 bg-warning bg-opacity-10">
-                            <button type="submit" class="btn btn-success float-start">업데이트</button>
-                            <a href="#delModal" class="btn btn-danger float-end" float-end roll="button" data-bs-toggle="modal">삭제</a>
-                        </div>
                     </form>
                 </div>
             </div>

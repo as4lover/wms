@@ -10,7 +10,7 @@ import random
 import datetime
 import math
 
-import csv
+import csv, os, platform
 from io import StringIO, BytesIO
 from django.core.files.base import ContentFile
 from django.template.loader import render_to_string
@@ -141,6 +141,7 @@ def place_order(request):
         )
     csv_file = ContentFile(csv_buffer.getvalue().encode("utf-8-sig"))
     order.ami_file.save(f"ami-{trackno}.csv", csv_file)
+
     # PDF 주문서 작성
     for item in orderitems:
         item_code = item.order_code

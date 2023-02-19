@@ -87,6 +87,7 @@ $(document).ready(function () {
                 alertify.success(response.status)
                 $('.cartdata').load(location.href+' .cartdata')
                 $('.del_cart').load(location.href+' .del_cart')
+                setInterval('location.reload()',500)
             }
         });
     });
@@ -127,6 +128,7 @@ $(document).ready(function () {
                 alertify.success(response.status)
                 $('.wishdata').load(location.href+' .wishdata')
                 $('.del_wish').load(location.href+' .del_wish')
+                setInterval('location.reload()',500)
             }
         });
     });    
