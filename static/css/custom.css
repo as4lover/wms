@@ -146,8 +146,8 @@ h2 {
 .label-top {
     position: absolute;
     color: black;
-    top: 8px;
-    right: 8px;
+    top: 1px;
+    right: 1px;
     padding: 5px 5px 5px 5px;
     font-size: .7rem;
     font-weight: 700;
