@@ -5,7 +5,7 @@
     <div class="align-baseline">
         <a href="{% url 'storeman:create_customer_address' customer.id %}" class="btn btn-info"><i
                 class="bi bi-plus"></i> 배송지추가</a>
-        <a href="{{request.META.HTTP_REFERER|escape}}" class="btn btn-info float-end"><i
+        <a href="{% url 'storeman:display_customer_list' %}" class="btn btn-info float-end"><i
                 class="fa-solid fa-left-long"></i> 이전</a>
     </div>
     <table class="table table-bordered border-primary mt-2">

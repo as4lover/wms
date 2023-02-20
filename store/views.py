@@ -3,6 +3,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import redirect, render
+from django.db.models import Q
 from .models import *
 
 # Import Pagination Stuff
@@ -65,35 +66,47 @@ def product_detail(request, cat_slug, prd_id):
     return render(request, "store/product_detail.html", context)
 
 
+# @login_required(login_url="account_login")
+# def search_ajax(request):
+#     h_products = Product.objects.filter(is_active=True).values_list("title", flat=True)
+#     e_products = Product.objects.filter(is_active=True).values_list(
+#         "e_title", flat=True
+#     )
+#     h_products_list = list(h_products)
+#     e_products_list = list(e_products)
+#     plus_product = h_products_list + e_products_list
+#     products_list = list(filter(None, plus_product))  # list 안에 빈 값지우기
+#     return JsonResponse(products_list, safe=False)
+
+
+# @login_required(login_url="account_login")
+# def searchproducts(request):
+#     if request.method == "POST":
+#         searchedterm = request.POST.get("productsearch")
+#         if searchedterm == "":
+#             return redirect(request.META.get("HTTP_REFERER"))
+#         else:
+#             product = (
+#                 Product.objects.filter(title__icontains=searchedterm)
+#                 | Product.objects.filter(e_title__icontains=searchedterm)
+#             ).first()
+#             if product:
+#                 return redirect(
+#                     "product/" + product.category.slug + "/" + str(product.id)
+#                 )
+#             else:
+#                 messages.info(request, "찾는 제품이없습니다.")
+#                 return redirect(request.META.get("HTTP_REFERER"))
+#     return redirect(request.META.get("HTTP_REFERER"))
+
+
 @login_required(login_url="account_login")
-def search_ajax(request):
-    h_products = Product.objects.filter(is_active=True).values_list("title", flat=True)
-    e_products = Product.objects.filter(is_active=True).values_list(
-        "e_title", flat=True
+def search(request):
+    q = request.GET.get("q", "")
+    data = Product.objects.filter(title__icontains=q) | Product.objects.filter(
+        e_title__icontains=q
     )
-    h_products_list = list(h_products)
-    e_products_list = list(e_products)
-    plus_product = h_products_list + e_products_list
-    products_list = list(filter(None, plus_product))  # list 안에 빈 값지우기
-    return JsonResponse(products_list, safe=False)
-
-
-@login_required(login_url="account_login")
-def searchproducts(request):
-    if request.method == "POST":
-        searchedterm = request.POST.get("productsearch")
-        if searchedterm == "":
-            return redirect(request.META.get("HTTP_REFERER"))
-        else:
-            product = (
-                Product.objects.filter(title__contains=searchedterm)
-                | Product.objects.filter(e_title__icontains=searchedterm)
-            ).first()
-            if product:
-                return redirect(
-                    "product/" + product.category.slug + "/" + str(product.id)
-                )
-            else:
-                messages.info(request, "찾는 제품이없습니다.")
-                return redirect(request.META.get("HTTP_REFERER"))
-    return redirect(request.META.get("HTTP_REFERER"))
+    context = {
+        "search_data": data,
+    }
+    return render(request, "store/search.html", context)

@@ -9,7 +9,7 @@
                     <i class="fa-solid fa-truck-fast"></i> </h5>{{_(' Delivery to')}}: {{company.h_name}}({{company.e_name}}) <span class="text-primary">{{company.address}}, {{company.city}}</span></h5>
                     <hr>
                     <p>{% trans 'Choose your location' %}</p>
-                    <div class="row p-1">
+                    <div class="row">
                         {% for addr in addressbook %}
                         <div class="col-6 col-md-auto">
                         <div class='card me-1 mt-2 {% if addr.default %}shadow bg-warning bg-opacity-10 {% else %} text-muted {% endif %}' style="width:140px;"> 
@@ -84,8 +84,8 @@
                 </div>
             </div>
         </div>
+    </form>
     </div>
-</form>
 </div>
 <!-- Modal -->
 <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">

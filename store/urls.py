@@ -16,8 +16,9 @@ urlpatterns = [
         name="product_detail",
     ),
     # 제품검색
-    path("search", views.search_ajax),
-    path("searchproducts", views.searchproducts, name="searchproducts"),
+    # path("search", views.search_ajax),
+    # path("searchproducts", views.searchproducts, name="searchproducts"),
+    path("search/", views.search, name="search"),
     # Cart
     path("add-to-cart", cart.addtocart, name="addtocart"),
     path("cart", cart.viewcart, name="cart"),

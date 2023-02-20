@@ -4,13 +4,11 @@
     <div class="d-flex">
     <a class="navbar-brand" href="/"><img src="/media/images/gomaps.png" alt="" style="height: 30px;"></a>
           <!--Start search-->
-          <form  action="{% url 'store:searchproducts' %}" method="POST">
-            {% csrf_token %}
+          <form method="get" action="{% url 'store:search' %}">
             <div class="col-sm-12 mt-3">
               <div class="input-group me-auto">
-                <input type="search" required class="form-control ms-2" name="productsearch" id="searchproducts"
-                  placeholder="{{_('Search...')}}">
-                <button type="submit" class="input-group-text "><i class="bi bi-search"></i></button>
+                <input name="q" type="text" required class="form-control ms-2" placeholder="{{_('Search...')}}" value={{ q|default_if_none:'' }}>
+                <button type="submit" class="btn btn-light "><i class="bi bi-search"></i></button>
               </div>
             </div>
           </form>

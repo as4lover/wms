@@ -1,5 +1,16 @@
 {% extends "../admin_base.html" %}
 {% load widget_tweaks %}
+{# django-tables2 render #}
+{% load render_table from django_tables2 %}
 {% block content %}
-{{members}}
-{% endblock %}
+<div class="container">
+
+    {% render_table table %}
+
+</div><!--End container-->
+
+{% endblock content %}
+
+
+    
+
