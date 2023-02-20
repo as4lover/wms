@@ -32,6 +32,7 @@
                         </a>
                         <div class="text-center my-2 product_data">
                             <div class="row">
+                                {% csrf_token %}  <!--JQuery를 이용해서 카트에 넣기위해 -->
                                 <input type="hidden" class="prod_id" id='cart-content' value="{{item.product.id}}">
                                 <div class="col-md-6 p-1">
                                     <button type="button" class="btn btn-secondary btn-sm" data-bs-toggle="modal" data-bs-target="#wishModal">
