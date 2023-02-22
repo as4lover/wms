@@ -30,10 +30,13 @@ from .order_man import (
     create_order,
     order_details,
     submit_order,
+    order_files,
 )
 
 from .staff_man import (
     display_staff,
+    create_staff,
+    create_driver,
 )
 
 app_name = "storeman"
@@ -41,6 +44,7 @@ app_name = "storeman"
 urlpatterns = [
     path("", admin_home, name="admin_home"),
     path("order_list/", order_list, name="order_list"),
+    path("order_files/", order_files, name="order_files"),
     path("create_order/", create_order, name="create_order"),
     path("order_details/<str:tk_no>", order_details, name="order_details"),
     path("export_csv/<str:tk_no>", export_csv, name="export_csv"),
@@ -82,4 +86,6 @@ urlpatterns = [
     path("delete_product/<str:pk_id>", delete_product, name="delete_product"),
     # Staff
     path("display_staff/", display_staff, name="display_staff"),
+    path("create_staff/", create_staff, name="create_staff"),
+    path("create_driver/<str:pk_id>", create_driver, name="create_driver"),
 ]

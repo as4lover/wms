@@ -7,5 +7,4 @@ class DriverAdmin(admin.ModelAdmin):
     list_display = [
         "name",
         "region",
-        "note",
     ]

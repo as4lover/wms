@@ -42,6 +42,12 @@ def order_list(request):
     return render(request, "storeman/order_list.html", context)
 
 
+def order_files(request):
+    files = Order.objects.filter(status="Pending")
+    context = {"files": files}
+    return render(request, "storeman/order/daily_order.html", context)
+
+
 @login_required(login_url="account_login")
 def order_details(request, tk_no):
     if not request.user.is_staff | request.user.is_superuser:

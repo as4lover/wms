@@ -32,9 +32,11 @@ def order_cancel(request, tk_no):
     order = Order.objects.get(tracking_no=tk_no, status="Pending")
     order.barcode_img.close()
     order.ami_file.close()
+    order.ami_daily_file.close()
     order.order_pdf.close()
     order.barcode_img.delete()
     order.ami_file.delete()
+    order.ami_daily_file.delete()
     order.order_pdf.delete()
     order.delete()
 

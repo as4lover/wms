@@ -1,7 +1,7 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 from store.models import *
-from .forms import OrderForm, ItemStatusForm
+from .forms import OrderForm
 
 
 @login_required(login_url="account_login")

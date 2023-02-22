@@ -5,7 +5,7 @@
     <a class="navbar-brand" href="/"><img src="/media/images/gomaps.png" alt="" style="height: 30px;"></a>
           <!--Start search-->
           <form method="get" action="{% url 'store:search' %}">
-            <div class="col-sm-12 mt-3">
+            <div class="col-sm-12 py-2">
               <div class="input-group me-auto">
                 <input name="q" type="text" required class="form-control ms-2" placeholder="{{_('Search...')}}" value={{ q|default_if_none:'' }}>
                 <button type="submit" class="input-group-text"><i class="bi bi-search"></i></button>
@@ -77,11 +77,9 @@
   <div class="container">
     <div class="row">
       <div class="col-md-6">
-      {% if request.user.is_authenticated %}
+        <a class="text-black" href="{% url 'store:category' %}">{{ _('Categories') }} |</a>
       <a class="text-black"  href="{% url 'store:wishlist_view' %}">{{_('Favorite')}} |</a>
-      <a class="text-black" href="{% url 'store:cart'%}">{{_('Cart')}} |</a>
-      {% endif %}
-      <a class="text-black" href="{% url 'store:category' %}">{{ _('Categories') }} </a>
+      <a class="text-black" href="{% url 'store:cart'%}">{{_('Cart')}}</a>
     </div>
     </div>
     </div>

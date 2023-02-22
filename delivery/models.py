@@ -18,7 +18,6 @@ class StaffMember(models.Model):
     ]
     name = models.ForeignKey(User, on_delete=models.PROTECT)
     region = models.CharField(max_length=10, choices=SYD_REGION, null=True, blank=True)
-    note = models.TextField(blank=True)
     is_status = models.BooleanField(default=True, blank=True)
     position = models.CharField(
         max_length=30, choices=POSITION_LIST, null=True, blank=True

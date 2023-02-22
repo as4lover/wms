@@ -141,6 +141,7 @@ def place_order(request):
         )
     csv_file = ContentFile(csv_buffer.getvalue().encode("utf-8-sig"))
     order.ami_file.save(f"ami-{trackno}.csv", csv_file)
+    order.ami_daily_file.save(f"ami-{trackno}.csv", csv_file)
 
     # PDF 주문서 작성
     for item in orderitems:
@@ -155,12 +156,14 @@ def place_order(request):
     order_date = order.created_at
     order_code = item_code
     order_type = item_type
+    bar_code = new_order.barcode_img
     # order_category = order.category
     message = order.message
     representative = order.representative
     rep_first_name = order.rep_first_name
     rep_last_name = order.rep_last_name
     context = {
+        "bar_code": bar_code,
         "orderitems": orderitems,
         "tk_no": trackno,
         "company_name": company_name,

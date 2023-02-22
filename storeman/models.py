@@ -4,7 +4,6 @@ from django.db import models
 from store.models import Product
 from customer.models import User
 from company.models import AddressBook
-from delivery.models import StaffMember
 
 
 class UserOrder(models.Model):

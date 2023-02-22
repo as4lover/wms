@@ -98,25 +98,23 @@ class Cart(models.Model):
     order_code = models.CharField(max_length=6, null=True, blank=True)
 
 
-aus_state = (
-    ("NSW", "NSW"),
-    ("VIC", "VIC"),
-    ("QLD", "QLD"),
-    ("ACT", "ACT"),
-    ("SA", "SA"),
-    ("WA", "WA"),
-    ("NT", "NT"),
-    ("TAS", "TAS"),
-)
-
-order_status = (
-    ("Pending", "Pending"),
-    ("Out for delivery", "Out for delivery"),
-    ("Delivered", "Delivered"),
-)
-
-
 class Order(models.Model):
+    aus_state = (
+        ("NSW", "NSW"),
+        ("VIC", "VIC"),
+        ("QLD", "QLD"),
+        ("ACT", "ACT"),
+        ("SA", "SA"),
+        ("WA", "WA"),
+        ("NT", "NT"),
+        ("TAS", "TAS"),
+    )
+
+    order_status = (
+        ("Pending", "Pending"),
+        ("Out for delivery", "Out for delivery"),
+        ("Delivered", "Delivered"),
+    )
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     company_name = models.CharField(max_length=150, null=False)
     company_e_name = models.CharField(max_length=150, blank=True, null=True)
@@ -136,9 +134,10 @@ class Order(models.Model):
     tracking_no = models.CharField(max_length=50, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    barcode_img = models.ImageField(upload_to="order/barcode/", blank=True)
-    ami_file = models.FileField(upload_to="order/ami/", blank=True)
-    order_pdf = models.FileField(upload_to="order/pdf/", blank=True)
+    barcode_img = models.ImageField(upload_to="order/barcode/%Y/%m/%d/", blank=True)
+    ami_file = models.FileField(upload_to="order/ami/%Y/%m/%d/", blank=True)
+    ami_daily_file = models.FileField(upload_to="order/daily/", blank=True)
+    order_pdf = models.FileField(upload_to="order/pdf/%Y/%m/%d/", blank=True)
     representative = models.CharField(max_length=100, blank=True)
     rep_first_name = models.CharField(max_length=50, blank=True)
     rep_last_name = models.CharField(max_length=50, blank=True)

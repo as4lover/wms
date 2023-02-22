@@ -1,0 +1,6 @@
+{% extends '../admin_base.html' %}
+{% block content %}
+{% for file in files  %}
+{{file.ami_daily_file}}
+{% endfor %}
+{% endblock %}

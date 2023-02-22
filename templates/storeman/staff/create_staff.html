@@ -1,0 +1,54 @@
+{% extends "../admin_base.html" %}
+{% load crispy_forms_tags %}
+{% block content %}
+<div class="container">
+    <div class="card mt-3">
+        <div class="card-header">
+            <h5>직원등록</h5>
+        </div>
+        <div class="card-body">
+            <form action="", method="post">
+                {% csrf_token %}
+                <div class="row"> 
+                    <div class="col-md-6">
+                        {{form.username|as_crispy_field}}
+                    </div>
+                    <div class="col-md-3">
+                        {{form.password1|as_crispy_field}}
+                    </div>
+                    <div class="col-md-3">
+                        {{form.password2|as_crispy_field}}
+                    </div>
+                </div><!--End first row-->
+                <div class="row">
+                    <div class="col-md-3">
+                        {{form.first_name|as_crispy_field}}
+                    </div>
+                    <div class="col-md-3">
+                        {{form.last_name|as_crispy_field}}
+                    </div>
+                    <div class="col-md-3">
+                        {{form.email|as_crispy_field}}
+                    </div>
+                    <div class="col-md-3">
+                        {{form.phone|as_crispy_field}}
+                    </div>
+                </div><!--End second row-->
+                <div class="row">
+                    <div class="col-md-3">
+                        {{form.role|as_crispy_field}}
+                    </div>
+                    <div class="col-md-3">
+                        {{form.is_active|as_crispy_field}}
+                    </div>
+                    <div class="col-md-3">
+                        {{form.is_staff|as_crispy_field}}
+                    </div>
+                </div><!-- End third row-->
+                <button type="submit" class="btn btn-primary">등록</button>
+            </form>
+        </div><!--End card-body-->
+    </div><!--End card-->
+</div><!--End container-->
+
+{% endblock content %}

@@ -1,7 +1,7 @@
-from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.http.response import JsonResponse
 from django.shortcuts import redirect, render
+from django.utils.translation import ugettext_lazy as _
 from .models import Cart, Product, WishItem
 from company.models import AddressBook
 
@@ -52,7 +52,7 @@ def updatecart(request):
             cart = Cart.objects.get(product_id=prod_id, user=request.user)
             cart.product_qty = prod_qty
             cart.save()
-            return JsonResponse({"status": "수량이 업데이트되었습니다."})
+            return JsonResponse({"status": "수량이 변경되었습니다."})
     return redirect("/")
 
 
@@ -103,9 +103,10 @@ def add_to_wishlist(request):
                     user=request.user,
                     product_id=prod_id,
                 )
-                return JsonResponse({"status": "추가했습니다."})
+                output = _("Add to Favorites")
+                return JsonResponse({"status": output})
         else:
-            return JsonResponse({"status": "자주주문 항목에 제품이 없습니다."})
+            return JsonResponse({"status": "제품이 없습니다."})
 
 
 @login_required(login_url="account_login")
@@ -132,7 +133,7 @@ def add_wish_to_cart(request):
                 Cart.objects.create(
                     user=request.user, product_id=prod_id, product_qty=prod_qty
                 )
-                return JsonResponse({"status": "Add to Order list"})
+                return JsonResponse({"status": _("Add to Order list")})
     else:
         return JsonResponse({"status": "로그인 해주세요"})
     return redirect("/")

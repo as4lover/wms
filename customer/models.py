@@ -3,7 +3,7 @@ from django.db import models
 
 
 ROLE_CHOICES = (
-    ("ADMIN", "admin"),
+    ("ADMIN", "Admin"),
     ("MANAGER", "Manager"),
     ("DRIVER", "Driver"),
     ("CUSTOMER", "Customer"),
