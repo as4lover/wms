@@ -1,4 +1,5 @@
 {% extends '../admin_base.html' %}
+{% load crispy_forms_tags %}
 {% block content %}
 <div class="container py-2">
     <div class="card">
@@ -7,20 +8,74 @@
         </div>
         <div class="card-body">
             <form method="POST" enctype="multipart/form-data">
-                <div class="row">
                 {% csrf_token %}
-                <div class="col-md-6">
-                    {{form.as_p}}
-                </div>    
-                <div class="card-footer py-1">
-                    <button type="submit" class="btn btn-outline-warning float-start">업데이트</button>
-                    <a href="{% url "storeman:product_list" %}" class="btn btn-outline-primary float-end">뒤로가기</a>
-                </div>    
-            </form>
-        </div>
+                <div class="row">
+                    <div class="col-md-3">
+                        {{form.title|as_crispy_field}}
+                    </div>
+                    <div class="col-md-3">
+                        {{form.e_title|as_crispy_field}}
+                    </div>
+                    <div class="col-md-3">
+                        {{form.category|as_crispy_field}}
+                    </div>
+                    <div class="col-md-2 ms-auto">
+                        {{form.is_active|as_crispy_field}}
+                    </div>
+                </div><!--End first row-->
+                <div class="row">
+                    <div class="col-md-2">
+                        {{form.bar_code|as_crispy_field}}
+                    </div>
+                    <div class="col-md-2">
+                        {{form.location|as_crispy_field}}
+                    </div>
+                    <div class="col-md-2">
+                        {{form.unit|as_crispy_field}}
+                    </div>
+                    <div class="col-md-2">
+                        {{form.spec|as_crispy_field}}
+                    </div>
+                    <div class="col-md-2">
+                        {{form.list_price|as_crispy_field}}
+                    </div>
+                    <div class="col-md-2">
+                        {{form.sale_price|as_crispy_field}}
+                    </div>
+                </div><!--End second row-->
+                <div class="row">
+                    <div class="col-md-2">
+                        {{form.quantity|as_crispy_field}}
+                    </div>
+                    <div class="col-md-2">
+                        {{form.brand|as_crispy_field}}
+                    </div>
+                    <div class="col-md-2">
+                        {{form.color|as_crispy_field}}
+                    </div>
+                    <div class="col-md-2">
+                        {{form.per_box|as_crispy_field}}
+                    </div>
+                    <div class="col-md-2">
+                        {{form.tag|as_crispy_field}}
+                    </div>
 
-    </div>
-</div>
+                </div><!--End Third row-->
+                <div class="row">
+                    <div class="col-md-6">
+                        {{form.description|as_crispy_field}}
+                    </div>
+                    <div class="col-md-6">
+                        {{form.image|as_crispy_field}}
+                    </div>
+                </div><!--End forth row-->
+            </div><!--End card-body-->
+                    <div class="card-footer">
+                        <button type="submit" class="btn btn-warning float-start">제품추가</button>
+                        <a href="{% url "storeman:product_list" %}" class="btn btn-primary float-end">뒤로가기</a>
+                    </div><!--End card-footer-->
+            </form>
+    </div><!--End card-->
+</div><!--End container-->
 
 {% endblock content %}
-

@@ -56,30 +56,7 @@ class EditUserForm(ModelForm):
         ]
 
 
-class OrderForm(ModelForm):
-    class Meta:
-        model = UserOrder
-        fields = "__all__"
-
-
-class OrderItemForm(ModelForm):
-    class Meta:
-        model = UserOrderItem
-        fields = "__all__"
-
-
-class ProductForm(ModelForm):
-    class Meta:
-        model = Product
-        fields = "__all__"
-
-
-class OrderCodeForm(ModelForm):
-    class Meta:
-        model = OrderCode
-        fields = "__all__"
-
-
+# Staff
 class CreateStaffForm(UserCreationForm):
     ROLE = (
         ("", "선택..."),
@@ -128,3 +105,57 @@ CreateDriverFormSet = inlineformset_factory(
     extra=1,
     can_delete=False,
 )
+
+# Order
+class OrderForm(ModelForm):
+    class Meta:
+        model = UserOrder
+        fields = "__all__"
+
+
+class OrderItemForm(ModelForm):
+    class Meta:
+        model = UserOrderItem
+        fields = "__all__"
+
+
+class OrderCodeForm(ModelForm):
+    class Meta:
+        model = OrderCode
+        fields = "__all__"
+
+
+# Product
+class ProductForm(ModelForm):
+    class Meta:
+        model = Product
+        fields = [
+            "title",
+            "e_title",
+            "category",
+            "bar_code",
+            "location",
+            "list_price",
+            "sale_price",
+            "quantity",
+            "description",
+            "brand",
+            "unit",
+            "spec",
+            "color",
+            "per_box",
+            "tag",
+            "image",
+            "is_active",
+        ]
+        labels = {
+            "title": "제품명(한글)",
+            "e_title": "제품명(영문)",
+            "category": "제품목록",
+            "bar_code": "바코드",
+            "location": "창고위치",
+            "color": "색깔",
+            "per_box": "박스당갯수",
+            "tag": "태그",
+            "is_active": "판매중",
+        }
