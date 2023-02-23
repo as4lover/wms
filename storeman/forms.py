@@ -127,6 +127,11 @@ class OrderCodeForm(ModelForm):
 
 # Product
 class ProductForm(ModelForm):
+    list_price = forms.DecimalField(max_digits=10, decimal_places=2, required=True)
+    sale_price = forms.DecimalField(max_digits=10, decimal_places=2, required=True)
+    quantity = forms.IntegerField()
+    per_box = forms.IntegerField()
+
     class Meta:
         model = Product
         fields = [

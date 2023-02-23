@@ -11,7 +11,7 @@ from .forms import ProductForm
 def product_list(request):
     if not request.user.is_staff | request.user.is_superuser:
         return redirect("/login")
-    products = Product.objects.all()
+    products = Product.objects.all().order_by("-created_at")
     product_filter = ProductFilter(request.GET, queryset=products)
     products_qs = product_filter.qs
     page_num = request.GET.get("page", 1)

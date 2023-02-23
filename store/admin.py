@@ -25,6 +25,8 @@ class ProductAdmin(admin.ModelAdmin):
         "unit",
         "spec",
         "is_active",
+        "created_at",
+        "updated_at",
     ]
     search_fields = ["title", "e_title"]
     list_editable = ["category", "is_active"]
