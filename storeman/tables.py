@@ -1,10 +1,11 @@
-import django_tables2 as tables
+from django_tables2 import tables, TemplateColumn
 from customer.models import User
 
 
 class StaffMemberTable(tables.Table):
     class Meta:
         model = User
+        attrs = {"class": "table table-sm"}
         template_name = "django_tables2/bootstrap.html"
         sequence = (
             "username",
@@ -15,3 +16,5 @@ class StaffMemberTable(tables.Table):
             "role",
         )
         exclude = ("password",)
+
+    edit = TemplateColumn(template_name="storeman/staff/staff_edit_column.html")

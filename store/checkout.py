@@ -67,8 +67,8 @@ def place_order(request):
 
     cart = Cart.objects.filter(user=request.user)
     cart_total_price = 0
-    for item in cart:
-        cart_total_price = cart_total_price + item.product.sale_price * item.product_qty
+    # for item in cart:
+    #     cart_total_price = cart_total_price + item.product.sale_price * item.product_qty
     new_order.total_price = cart_total_price
     now_time = datetime.datetime.now()
     trk_date = now_time.strftime("%y%m%d")

@@ -34,6 +34,11 @@ def create_staff(request):
     return render(request, "storeman/staff/create_staff.html", context)
 
 
+def edit_staff(request, pk_id):
+    form = CreateStaffForm()
+    pass
+
+
 def create_driver(request, pk_id):
     staff = User.objects.get(id=pk_id)
     driver = StaffMember.objects.filter(name__username=staff.username)
