@@ -88,6 +88,6 @@ urlpatterns = [
     # Staff
     path("display_staff/", display_staff, name="display_staff"),
     path("create_staff/", create_staff, name="create_staff"),
-    path("edit_staff/", edit_staff, name="edit_staff"),
+    path("edit_staff/<str:pk_id>", edit_staff, name="edit_staff"),
     path("create_driver/<str:pk_id>", create_driver, name="create_driver"),
 ]

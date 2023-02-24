@@ -5,7 +5,7 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django_tables2 import RequestConfig
 from storeman.tables import StaffMemberTable
 from customer.models import User
-from .forms import CreateStaffForm, CreateDriverFormSet
+from .forms import CreateStaffForm, CreateDriverFormSet, EditStaffForm
 
 # === Staff Info ==================
 @login_required(login_url="account_login")
@@ -14,7 +14,9 @@ def display_staff(request):
         return redirect("/login")
     members = User.objects.filter(is_staff=True).exclude(is_superuser=True)
     table = StaffMemberTable(members)
-    RequestConfig(request).configure(table)  # tables2 sorting 위해
+    RequestConfig(request, paginate={"per_page": 5}).configure(
+        table
+    )  # tables2 sorting 위해
     context = {
         "table": table,
     }
@@ -35,8 +37,16 @@ def create_staff(request):
 
 
 def edit_staff(request, pk_id):
-    form = CreateStaffForm()
-    pass
+    staff = User.objects.get(id=pk_id)
+    if request.method == "POST":
+        form = EditStaffForm(request.POST, instance=staff)
+        if form.is_valid():
+            form.save()
+            return redirect("storeman:display_staff")
+    else:
+        form = EditStaffForm(instance=staff)
+    context = {"form": form, "staff": staff}
+    return render(request, "storeman/staff/edit_staff.html", context)
 
 
 def create_driver(request, pk_id):

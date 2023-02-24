@@ -106,6 +106,22 @@ CreateDriverFormSet = inlineformset_factory(
     can_delete=False,
 )
 
+
+class EditStaffForm(ModelForm):
+    class Meta:
+        model = User
+        fields = [
+            "username",
+            "first_name",
+            "last_name",
+            "email",
+            "phone",
+            "role",
+            "is_active",
+            "is_staff",
+        ]
+
+
 # Order
 class OrderForm(ModelForm):
     class Meta:

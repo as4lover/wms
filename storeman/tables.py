@@ -17,4 +17,6 @@ class StaffMemberTable(tables.Table):
         )
         exclude = ("password",)
 
-    edit = TemplateColumn(template_name="storeman/staff/staff_edit_column.html")
+    edit = TemplateColumn(
+        template_name="storeman/staff/staff_edit_column.html", orderable=False
+    )
