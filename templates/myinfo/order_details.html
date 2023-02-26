@@ -23,7 +23,8 @@
                             </ul>
                             <ul>
                                 <li><strong>{{_('E-mail')}}:</strong> {{ order.email}}</li>
-                                <li><strong>{{_('Order Status')}}:</strong> {% if order.status == "Pendding" %}{% endif %} <a class="text-bg-primary">{{order.status}}</a></li>
+                                <li><strong>{{_('Order Status')}}:</strong> {% if order.status == "Pendding" %}{% endif %} <a class="badge bg-primary text-wrap">{{order.status}}</a></li>
+                                <li class="fw-bold">{{_('Messages')}}: {{order.message}}</li>
                             </ul>
                         </div>
                         <div class="col-md-6 mt-2">

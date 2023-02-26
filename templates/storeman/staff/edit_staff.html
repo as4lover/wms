@@ -2,17 +2,38 @@
 {% load crispy_forms_tags %}
 {% block content %}
 <div class="container">
-    <div class="card">
+    <div class="card mt-3">
         <div class="card-header">
-            <h5>직원정보수정</h5>
+            <h5>{{staff.username}} 직원정보수정</h5>
         </div>
         <div class="card-body">
             <form action="" method='post'>
                 {% csrf_token %}
-                {{form|crispy}}
+                <div class="row">
+                    <div class="col-md-3">
+                        {{form.last_name|as_crispy_field}}
+                    </div>
+                    <div class="col-md-3">
+                        {{form.first_name|as_crispy_field}}
+                    </div>
+                    <div class="col-md-3">
+                        {{form.email|as_crispy_field}}
+                    </div>
+                    <div class="col-md-3">
+                        {{form.phone|as_crispy_field}}
+                    </div>
+                </div><!--first row-->
+                <div class="row">
+                    <div class="col-md-3">
+                        {{form.role|as_crispy_field}}
+                    </div>
+                    <div class="col-md-3 py-3">
+                        {{form.is_active|as_crispy_field}}
+                    </div>
+                </div><!--Second row-->
             </div><!--End card-body-->
             <div class="card-footer">
-                
+                <button type="submit" class="btn btn-primary">수정</button>
             </div><!--End card-footer-->
         </form>
     </div><!--End card-->

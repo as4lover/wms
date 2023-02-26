@@ -4,16 +4,17 @@ from customer.models import User
 
 class StaffMember(models.Model):
     SYD_REGION = [
-        ("EAST", "동부"),
-        ("WEST", "서부"),
-        ("SOUTH", "남부"),
-        ("NORTH", "북부"),
-        ("REGINE", "외곽"),
-        ("GOMAPS", "고맙스"),
+        ("동부팀", "동부팀"),
+        ("서부팀", "서부팀"),
+        ("남부팀", "남부팀"),
+        ("북부팀", "북부팀"),
+        ("외곽팀", "외곽팀"),
+        ("고맙스", "고맙스"),
     ]
     POSITION_LIST = [
-        ("부장", "부장"),
+        ("팀장", "팀장"),
         ("차장", "차장"),
+        ("과장", "과장"),
         ("대리", "대리"),
     ]
     name = models.ForeignKey(User, on_delete=models.PROTECT)

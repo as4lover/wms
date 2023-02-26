@@ -207,4 +207,5 @@ def place_order(request):
     email.fail_silently = False
     email.send()
     messages.success(request, "주문이완료되었습니다.")
-    return HttpResponseRedirect(request.META.get("HTTP_REFERER"))
+    # return HttpResponseRedirect(request.META.get("HTTP_REFERER"))
+    return redirect("/")

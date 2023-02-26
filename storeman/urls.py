@@ -40,6 +40,11 @@ from .staff_man import (
     edit_staff,
 )
 
+from .delivery_man import (
+    display_delivery_team,
+    edit_delivery_team,
+)
+
 app_name = "storeman"
 
 urlpatterns = [
@@ -90,4 +95,9 @@ urlpatterns = [
     path("create_staff/", create_staff, name="create_staff"),
     path("edit_staff/<str:pk_id>", edit_staff, name="edit_staff"),
     path("create_driver/<str:pk_id>", create_driver, name="create_driver"),
+    # Delivery
+    path("display_delivery_team/", display_delivery_team, name="display_delivery_team"),
+    path(
+        "edit_delivery_tean/<str:pk_id>", edit_delivery_team, name="edit_delivery_team"
+    ),
 ]

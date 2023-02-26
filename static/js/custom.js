@@ -187,7 +187,7 @@ $(document).ready(function () {
           
         //   $bar.text($bar.width()/5 + "%");
           }, 800);
-        
+
       });
       
       $('#myModal').on('hidden.bs.modal', function () {

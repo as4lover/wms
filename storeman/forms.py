@@ -7,6 +7,8 @@ from delivery.models import StaffMember
 from django import forms
 from .models import *
 
+# Customer & Address Form & Formset
+
 
 class AddUserAddressForm(ModelForm):
     class Meta:
@@ -31,6 +33,12 @@ class EditAddressForm(ModelForm):
 
 
 class CreateUserForm(UserCreationForm):
+    ROLE = (
+        ("", "선택..."),
+        ("customer", "customer"),
+    )
+    role = forms.ChoiceField(label="역할", choices=ROLE)
+
     class Meta:
         model = User
         fields = [
@@ -39,12 +47,19 @@ class CreateUserForm(UserCreationForm):
             "last_name",
             "email",
             "phone",
+            "role",
             "password1",
             "password2",
         ]
 
 
 class EditUserForm(ModelForm):
+    ROLE = (
+        ("", "선택..."),
+        ("CUSTOMER", "고객"),
+    )
+    role = forms.ChoiceField(label="역할", choices=ROLE)
+
     class Meta:
         model = User
         fields = [
@@ -52,6 +67,7 @@ class EditUserForm(ModelForm):
             "last_name",
             "email",
             "phone",
+            "role",
             "is_active",
         ]
 
@@ -91,35 +107,79 @@ class CreateStaffForm(UserCreationForm):
         ]
 
 
-class AddDeliveryStaffForm(ModelForm):
-    class Meta:
-        model = StaffMember
-        fields = "__all__"
-
-
-CreateDriverFormSet = inlineformset_factory(
-    User,
-    StaffMember,
-    form=AddDeliveryStaffForm,
-    min_num=1,
-    extra=1,
-    can_delete=False,
-)
-
-
 class EditStaffForm(ModelForm):
+    ROLE = (
+        ("", "선택..."),
+        ("ADMIN", "Admin"),
+        ("MANAGER", "Manager"),
+        ("DRIVER", "Driver"),
+    )
+    last_name = forms.CharField(label="성명", widget=forms.TextInput())
+    first_name = forms.CharField(label="이름", widget=forms.TextInput())
+    email = forms.EmailField(label="이메일", widget=forms.TextInput())
+    phone = forms.CharField(label="전화번호", max_length=10, widget=forms.TextInput())
+    role = forms.ChoiceField(label="역할", choices=ROLE)
+    is_active = forms.BooleanField(label="근무중", required=False)
+
     class Meta:
         model = User
         fields = [
-            "username",
             "first_name",
             "last_name",
             "email",
             "phone",
             "role",
             "is_active",
-            "is_staff",
         ]
+
+
+# Delivery Team
+
+
+class EditDeliveryTeamForm(ModelForm):
+    SYD_REGION = (
+        ("", "선택..."),
+        ("동부팀", "동부팀"),
+        ("서부팀", "서부팀"),
+        ("남부팀", "남부팀"),
+        ("북부팀", "북부팀"),
+        ("외곽팀", "외곽팀"),
+        ("고맙스", "고맙스"),
+    )
+    POSITION = (
+        ("", "선택..."),
+        ("팀장", "팀장"),
+        ("차장", "차장"),
+        ("과장", "과장"),
+        ("대리", "대리"),
+    )
+    region = forms.ChoiceField(label="지역", choices=SYD_REGION)
+    position = forms.ChoiceField(label="직책", choices=POSITION)
+    is_status = forms.BooleanField(label="근무중", required=False)
+
+    class Meta:
+        model = StaffMember
+        fields = [
+            "region",
+            "position",
+            "is_status",
+        ]
+
+
+# class AddDeliveryStaffForm(ModelForm):
+#     class Meta:
+#         model = StaffMember
+#         fields = "__all__"
+
+
+# CreateDriverFormSet = inlineformset_factory(
+#     User,
+#     StaffMember,
+#     form=AddDeliveryStaffForm,
+#     min_num=1,
+#     extra=1,
+#     can_delete=False,
+# )
 
 
 # Order

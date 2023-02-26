@@ -1,0 +1,18 @@
+{% extends "../admin_base.html" %}
+{% load crispy_forms_tags %}
+{% block content %}
+<div class="container">
+    <div class="card mt-2">
+        <div class="card-header">
+           <p class="fs-5">{{team.name}} {{team.name.last_name}} {{team.name.first_name}}</p>
+        </div>
+        <div class="card-body">
+            <form method='post'>
+                {{form|crispy}}
+                {% csrf_token %}
+                <button type="submit" class="btn btn-sm btn-primary">수정</button>
+            </form>
+        </div>
+    </div><!--End card-->
+</div><!--End container-->
+{% endblock %}

@@ -32,7 +32,7 @@ import os
 def admin_home(request):
     if not request.user.is_staff | request.user.is_superuser:
         return redirect("/login")
-    orders = Order.objects.all()
+    orders = Order.objects.all().order_by("-created_at")
     pending_order = orders.filter(status="Pending").count()
     on_delivery = orders.filter(status="Out for delivery").count()
     delivered = orders.filter(status="Delivered").count()
