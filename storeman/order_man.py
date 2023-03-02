@@ -1,51 +1,77 @@
-from django.shortcuts import render, redirect, HttpResponseRedirect
+from django.conf import settings
+from django.shortcuts import render, redirect, HttpResponseRedirect, HttpResponse
 from django.contrib.auth.decorators import login_required
 from store.models import Order, OrderItem
 from django.contrib import messages
+from django_tables2 import RequestConfig
 from .forms import OrderForm
-from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from storeman.tables import OrderListTable
+from .filters import OrderListFilter
 
-
-@login_required(login_url="account_login")
-def submit_order(request):
-    if not request.user.is_staff | request.user.is_superuser:
-        return redirect("/login")
-    orders = Order.objects.filter(status="Pending")
-    print(orders.count())
-    ami_file_name = []
-    if orders.count() != 0:
-        for order in orders:
-            print(order.tracking_no)
-        orders.update(status="Out for delivery")
-    else:
-        messages.info(request, "주문이 없습니다.")
-    return HttpResponseRedirect(request.META.get("HTTP_REFERER"))
+import os, pathlib, glob
+import datetime
+import pandas as pd
+import mimetypes
 
 
 @login_required(login_url="account_login")
 def order_list(request):
     if not request.user.is_staff | request.user.is_superuser:
         return redirect("/login")
-    orders = Order.objects.all()
-    # Set up Pagination
-    page_num = request.GET.get("page", 1)
-    paginator = Paginator(orders, 5)
-    try:
-        page_obj = paginator.page(page_num)
-    except PageNotAnInteger:
-        page_obj = paginator.page(1)
-    except EmptyPage:
-        page_obj = paginator.page(paginator.num_pages)
-
-    page_num_counter = "a" * page_obj.paginator.num_pages
-    context = {"page_obj": page_obj, "page_num_counter": page_num_counter}
-    return render(request, "storeman/order_list.html", context)
+    orders = Order.objects.all().order_by("-created_at")
+    table = OrderListTable(orders)
+    RequestConfig(request, paginate={"per_page": 5}).configure(table)
+    context = {
+        "table": table,
+    }
+    return render(request, "storeman/order/order_list.html", context)
 
 
-def order_files(request):
-    files = Order.objects.filter(status="Pending")
-    context = {"files": files}
+def daily_order(request):
+    daily_order = Order.objects.filter(status="Pending")
+    daily_count = daily_order.count()
+    media_filepath = pathlib.Path(settings.MEDIA_ROOT)
+    order_filepath = pathlib.Path(media_filepath, "order")
+    daily_filepath = pathlib.Path(order_filepath, "daily")
+    os.chdir(daily_filepath)
+    csv_files = glob.glob(f"ami-*.csv")
+    csv_files_count = len(csv_files)
+    merged_file = glob.glob(f"daily*.csv")
+    context = {
+        "daily_oder": daily_order,
+        "daily_count": daily_count,
+        "csv_files": csv_files,
+        "csv_files_count": csv_files_count,
+        "merged_files": merged_file,
+    }
     return render(request, "storeman/order/daily_order.html", context)
+
+
+@login_required(login_url="account_login")
+def submit_order(request):
+    if not request.user.is_staff | request.user.is_superuser:
+        return redirect("/login")
+    daily_order = Order.objects.filter(status="Pending")
+    media_filepath = pathlib.Path(settings.MEDIA_ROOT)
+    order_filepath = pathlib.Path(media_filepath, "order")
+    daily_filepath = pathlib.Path(order_filepath, "daily")
+    os.chdir(daily_filepath)
+    now = datetime.datetime.now()
+    csv_files = glob.glob(f"ami-*.csv")
+    merged_file = glob.glob(f"daily*.csv")
+    if merged_file == []:
+        daily_merge_name = (
+            f"daily_ami_merged-{now.year}{now.month}{now.day}{now.hour}{now.minute}.csv"
+        )
+        df_append = pd.concat(map(pd.read_csv, csv_files))
+        df_append.to_csv(daily_merge_name, encoding="utf-8", index=False, header=False)
+        daily_order.update(status="Out for delivery")
+        messages.info(request, "알맹이용 파일이 만들어졌습니다.")
+    else:
+        print(merged_file)
+        messages.info(request, "알맹이용파일이 있습니다.")
+
+    return HttpResponseRedirect(request.META.get("HTTP_REFERER"))
 
 
 @login_required(login_url="account_login")

@@ -1,5 +1,5 @@
 import django_filters
-from store.models import Product
+from store.models import Product, Order
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout, Row, Column
 
@@ -14,19 +14,11 @@ class ProductFilter(django_filters.FilterSet):
             "category": ["exact"],
         }
 
-    #     labels = {
-    #         "title": "제품명(한글)",
-    #         "e_title": "제품명(영문)",
-    #         "category": "카테고리",
-    #     }
 
-    # def __init__(self, *args, **kwargs):
-    #     super().__init__(*args, **kwargs)
-    #     self.helper = FormHelper()
-    #     self.helper.layout = Layout(
-    #         Row(
-    #             Column("title__icontains", css_class="form col-md-3 mb-0"),
-    #             Column("e_title__icontains", css_class="form col-md-3 mb-0"),
-    #             Column("category", css_class="form col-md-3 mb-0"),
-    #         ),
-    #     )
+class OrderListFilter(django_filters.FilterSet):
+    class Meta:
+        model = Order
+        fields = {
+            "created_at": ["exact"],
+            "status": ["exact"],
+        }

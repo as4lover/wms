@@ -14,7 +14,9 @@ def display_staff(request):
         return redirect("/login")
     members = User.objects.filter(is_staff=True).exclude(is_superuser=True)
     table = StaffMemberTable(members)
-    RequestConfig(request).configure(table)  # tables2 sorting 위해
+    RequestConfig(request, paginate={"per_page": 5}).configure(
+        table
+    )  # tables2 sorting 위해
     context = {
         "table": table,
     }

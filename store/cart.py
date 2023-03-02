@@ -73,11 +73,11 @@ def deletecartitem(request):
 # 자주주문제품들
 @login_required(login_url="account_login")
 def wishlist_view(request):
-    if request.user.is_superuser:
-        return redirect("/storeman")
+    if request.user.is_staff and request.user.role == "MANAGER":
+        return redirect("/delivery")
     if request.user.is_staff and request.user.role == "DRIVER":
         return redirect("/delivery")
-    if request.user.is_staff:
+    if request.user.is_staff and request.user.role == "ADMIN":
         return redirect("/storeman")
     else:
         wish_items = WishItem.objects.filter(user=request.user)
