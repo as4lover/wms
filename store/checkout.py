@@ -186,6 +186,7 @@ def place_order(request):
     weasyprint.HTML(string=html, base_url=request.build_absolute_uri()).write_pdf(out)
     pdf_file = ContentFile(out.getvalue())
     order.order_pdf.save(f"{trackno}.pdf", pdf_file)
+    order.pdf_daily_file.save(f"{trackno}.pdf", pdf_file)
 
     # 주문완료 메일 보내기
     template = render_to_string(

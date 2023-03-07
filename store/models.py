@@ -117,6 +117,10 @@ class Order(models.Model):
         ("Out for delivery", "Out for delivery"),
         ("Delivered", "Delivered"),
     )
+    PAYMENT = (
+        ("수금", "수금"),
+        ("미수금", "미수금"),
+    )
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     company_name = models.CharField(max_length=150, null=False)
     company_e_name = models.CharField(max_length=150, blank=True, null=True)
@@ -129,7 +133,7 @@ class Order(models.Model):
     state = models.CharField(max_length=3, choices=aus_state, default="NSW")
     postcode = models.CharField(max_length=4, null=False)
     total_price = models.DecimalField(max_digits=10, decimal_places=2)
-    payment_mode = models.CharField(max_length=150, null=False)
+    payment_mode = models.CharField(max_length=150, choices=PAYMENT, null=True)
     payment_id = models.CharField(max_length=100, null=True, blank=True)
     status = models.CharField(max_length=150, choices=order_status, default="Pending")
     message = models.TextField(null=True, blank=True)
@@ -140,10 +144,14 @@ class Order(models.Model):
     ami_file = models.FileField(upload_to="order/ami/%Y/%m/%d/", blank=True)
     ami_daily_file = models.FileField(upload_to="order/daily/", blank=True)
     order_pdf = models.FileField(upload_to="order/pdf/%Y/%m/%d/", blank=True)
+    pdf_daily_file = models.FileField(upload_to="order/daily", blank=True)
     representative = models.CharField(max_length=100, blank=True)
     rep_first_name = models.CharField(max_length=50, blank=True)
     rep_last_name = models.CharField(max_length=50, blank=True)
     delivery_note = models.TextField(null=True, blank=True)
+    delivery_photo = models.ImageField(
+        verbose_name="사진업로드", upload_to="order/delivery/%Y/%m/%d", null=True
+    )
 
     def __str__(self):
         return f"{self.id}, {self.tracking_no},{self.barcode_img}"
@@ -159,9 +167,8 @@ class Order(models.Model):
 
 
 class OrderItem(models.Model):
-    item_status = (
+    STATUS = (
         ("정상", "정상"),
-        ("파손", "파손"),
         ("반품", "반품"),
         ("미배달", "미배달"),
     )
@@ -172,7 +179,7 @@ class OrderItem(models.Model):
     order_code = models.CharField(max_length=6, null=True, blank=True)
     order_type = models.CharField(max_length=10, null=True, blank=True)
     item_status = models.CharField(
-        max_length=100, null=True, blank=True, choices=item_status, default="정상"
+        max_length=100, null=True, blank=True, choices=STATUS, default="정상"
     )
     # 제품위치별 정렬
     class Meta:
@@ -195,3 +202,22 @@ class WishItem(models.Model):
 
     def __str__(self):
         return f"{self.user}"
+
+
+# Daily Order 처리
+
+
+class DailyJobs(models.Model):
+    created_user = models.ForeignKey(
+        User, verbose_name=_("작성자"), on_delete=models.CASCADE, null=True
+    )
+    daily_merged_csv = models.FileField(
+        verbose_name=_("알맹이CSV"), upload_to="order/daily/csv/%Y/%m/%d/", blank=True
+    )
+    daily_merged_pdf = models.FileField(
+        verbose_name=_("주문서PDF"), upload_to="order/daily/pdf/%Y/%m/%d", blank=True
+    )
+    created_at = models.DateTimeField(verbose_name=_("작성일"), auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.created_user}"

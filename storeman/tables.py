@@ -1,6 +1,6 @@
 import django_tables2 as tables
 from customer.models import User
-from store.models import Order
+from store.models import Order, DailyJobs
 
 
 class StaffMemberTable(tables.Table):
@@ -92,4 +92,22 @@ class OrderListTable(tables.Table):
             "postcode",
             "address",
             "city",
+            "pdf_daily_file",
         )
+
+
+## DAily Jobs table
+class dailyOrderTable(tables.Table):
+    class Meta:
+        model = DailyJobs
+        attrs = {
+            "class": "table table-hover",
+        }
+        sequence = (
+            "daily_merged_csv",
+            "daily_merged_pdf",
+            "created_user",
+            "created_at",
+        )
+        exclude = ("id",)
+        template_name = "django_tables2/bootstrap5.html"

@@ -47,6 +47,7 @@ class OrderAdmin(admin.ModelAdmin):
         "message",
         "ami_file",
         "order_pdf",
+        "ami_daily_file",
     )
     list_editable = [
         "status",
@@ -79,3 +80,13 @@ class OrderCodeAdmin(admin.ModelAdmin):
 @admin.register(WishItem)
 class WishItemAdmin(admin.ModelAdmin):
     list_display = ["user", "product"]
+
+
+@admin.register(DailyJobs)
+class DailyJobsAdmin(admin.ModelAdmin):
+    list_display = [
+        "created_user",
+        "daily_merged_csv",
+        "daily_merged_pdf",
+        "created_at",
+    ]

@@ -1,0 +1,26 @@
+{% extends './delivery_base.html' %}
+{% load crispy_forms_tags %}
+{% block content %}
+<div class="container-sm">
+    <div class="card mt-3">
+        <div class="card-header">
+            {{orderitems.product.title}}
+        </div>
+        <div class="card-body">
+            <form action="" method="POST">
+                {% csrf_token %}
+                {{item_form.item_status|as_crispy_field}}
+                <div class="row">
+                    <div class="col-md-6">
+                        <button type="submit" class="btn btn-sm btn-warning float-start" name="Submit">저장</button>
+                    </div>
+                    <div class="col-md-6">
+                        <a href="{% url "delivery:delivery_details" orderitems.order.tracking_no %}?next={{ request.path|urlencode }}"
+                        class="btn btn-sm btn-primary float-end">나가기</a>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+    {% endblock %}

@@ -1,7 +1,7 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 from store.models import *
-from .forms import OrderForm
+from .forms import OrderForm, ItemStatusForm
 
 
 @login_required(login_url="account_login")
@@ -32,6 +32,20 @@ def delivery_details(request, tk_no):
         "form": form,
     }
     return render(request, "delivery/delivery_details.html", context)
+
+
+def delivery_items_status(request, pk_id):
+    orderitems = OrderItem.objects.get(id=pk_id)
+    item_form = ItemStatusForm(instance=orderitems)  # update를 위해 instance 사용
+    if request.method == "POST":
+        item_form = ItemStatusForm(request.POST, instance=orderitems)
+        if item_form.is_valid():
+            item_form.save()
+    context = {
+        "item_form": item_form,
+        "orderitems": orderitems,
+    }
+    return render(request, "delivery/delivery_items_status.html", context)
 
 
 def vegi_order_list(request):

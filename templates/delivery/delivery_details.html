@@ -1,62 +1,63 @@
 {% extends './delivery_base.html' %}
-
+{% load crispy_forms_tags %}
 {% block content %}
 
 {% if request.user.is_staff %}
 <div class="container-sm container-fluid">
-  <h6 class="text-center">{{order.company_name}}: {{order.tracking_no}}</h6>
-    <div class="row">
-        <div class="col-6-sm">
-<div class="table-responsive-sm">
-<table class="table text-center">
-  <thead>
-    <tr>
-      <th scope="col">#</th>
-      <th scope="col">품목</th>
-      <th scope="col">수량</th>
-      <th scope="col">상태</th>
-      
-   </tr>
-  </thead>
-  <tbody>
-    {% for item in orderitems %}
-    <tr>
-      <td>{{ forloop.counter}}</td>
-      <td>{{ item.product.title}}</td>
-      <td>{{ item.quantity}}</td>
-      <td>{{ item.item_status }}</td>
-    </tr>
-    {% endfor %}
-  </tbody>
-</table>
+  <h6 class="text-center mt-3">{{order.company_name}}: {{order.tracking_no}}</h6>
+  <div class="row">
+    <div class="col-6-sm">
+        <table class="table text-center table-responsive-sm">
+          <thead>
+            <tr>
+              <th scope="col">#</th>
+              <th scope="col">품목</th>
+              <th scope="col">수량</th>
+              <th scope="col">상태</th>
 
-</div>
-       </div>
-<div>
-<form action="" method="POST">
-  {% csrf_token %}
-  {{form.delivery_note.label_tag}}
-  {{form.delivery_note}}
-  <br>
-  {{form.status.label_tag}} 
-  {{form.status}}
-  <br>
-  <div class="card border-0 p-2">
-    <div class="card-body">
-      <div class="row">
-        <div class="col-6">
-          <button type="submit" class="btn btn-sm btn-warning float-start" name="Submit">확인</button>
-        </div>
-        <div class="col-6">
-          <a href="{% url "delivery:delivery_home" %}?next={{ request.path|urlencode }}" class="btn btn-sm btn-primary float-end">취소</a>
-        </div>
-        </div>
-    </div>
-  </div>
-</form>
-</div>
+            </tr>
+          </thead>
+          <tbody>
+            {% for item in orderitems %}
+            <tr>
+                <td>{{ forloop.counter}}</td>
+                <td>
+                  <a href="{% url 'delivery:delivery_items_status' item.id %}">{{ item.product.title}}</a>
+                </td>
+                <td>{{ item.quantity}}</td>
+                <td class="{% if item.item_status  == '반품' %} text-danger {% elif item.item_status == '미배달' %} text-primary {% endif %}">
+                  {{ item.item_status }}
+                </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
 
+    </div> <!--End col-6-->
+  <div><!--End row-->
+    <div class='row'>
+      <form action="" method="POST">
+        {% csrf_token %}
+      <div class="col-md-12">
+      {{form.delivery_note|as_crispy_field}}
+      {{form.status|as_crispy_field}}
+      {{form.payment_mode|as_crispy_field}}
+      {{form.delivery_photo|as_crispy_field}}
     </div>
-</div>
+        <div class="card border-0 p-2">
+          <div class="card-body">
+            <div class="row">
+              <div class="col-6">
+                <button type="submit" class="btn btn-sm btn-warning float-start" name="Submit">확인</button>
+              </div>
+              <div class="col-6">
+                <a href="{% url "delivery:delivery_home" %}?next={{ request.path|urlencode }}"
+                class="btn btn-sm btn-primary float-end">나가기</a>
+              </div>
+            </form>
+            </div>
+          </div>
+        </div>
+</div> <!--End container-->
 {% endif %}
 {% endblock content %}
