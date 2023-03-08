@@ -60,9 +60,9 @@ def place_order(request):
     new_order.city = company.city
     new_order.state = company.state
     new_order.postcode = company.postcode
-    new_order.representative = company.representative.name
-    new_order.rep_first_name = company.representative.name.first_name
-    new_order.rep_last_name = company.representative.name.last_name
+    new_order.driver = company.driver.name
+    new_order.driver_first_name = company.driver.name.first_name
+    new_order.driver_last_name = company.driver.name.last_name
     new_order.message = request.POST.get("message")
 
     cart = Cart.objects.filter(user=request.user)
@@ -159,9 +159,9 @@ def place_order(request):
     bar_code = new_order.barcode_img
     # order_category = order.category
     message = order.message
-    representative = order.representative
-    rep_first_name = order.rep_first_name
-    rep_last_name = order.rep_last_name
+    driver = order.driver
+    driver_first_name = order.driver_first_name
+    driver_last_name = order.driver_last_name
     context = {
         "bar_code": bar_code,
         "orderitems": orderitems,
@@ -177,9 +177,9 @@ def place_order(request):
         "order_type": order_type,
         # "order_category": order_category,
         "message": message,
-        "representative": representative,
-        "rep_first_name": rep_first_name,
-        "rep_last_name": rep_last_name,
+        "driver": driver,
+        "driver_first_name": driver_first_name,
+        "driver_last_name": driver_last_name,
     }
     html = render_to_string("storeman/pdf-output.html", context)
     out = BytesIO()

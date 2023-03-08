@@ -36,7 +36,7 @@
     </div> <!--End col-6-->
   <div><!--End row-->
     <div class='row'>
-      <form action="" method="POST">
+      <form action="" method="POST"  enctype="multipart/form-data">
         {% csrf_token %}
       <div class="col-md-12">
       {{form.delivery_note|as_crispy_field}}
@@ -48,7 +48,8 @@
           <div class="card-body">
             <div class="row">
               <div class="col-6">
-                <button type="submit" class="btn btn-sm btn-warning float-start" name="Submit">확인</button>
+                <a href=""></a>
+                <button type="submit" class="btn btn-sm btn-warning float-start" name="Submit">저장</button>
               </div>
               <div class="col-6">
                 <a href="{% url "delivery:delivery_home" %}?next={{ request.path|urlencode }}"

@@ -2,6 +2,8 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 from store.models import *
 from .forms import OrderForm, ItemStatusForm
+from .table import MyDeliveryTable
+from django_tables2 import RequestConfig
 
 
 @login_required(login_url="account_login")
@@ -9,8 +11,8 @@ def delivery_home(request):
     if not request.user.is_staff | request.user.is_superuser:
         return redirect("/login")
     orders = Order.objects.filter(
-        representative=request.user, status="Pending"
-    ) | Order.objects.filter(representative=request.user, status="Out for delivery")
+        driver=request.user, status="Pending"
+    ) | Order.objects.filter(driver=request.user, status="Out for delivery")
     context = {"orders": orders}
     return render(request, "delivery/delivery_home.html", context)
 
@@ -23,14 +25,16 @@ def delivery_details(request, tk_no):
     orderitems = OrderItem.objects.filter(order=order)
     form = OrderForm(instance=order)  # update를 위해 instance 사용
     if request.method == "POST":
-        form = OrderForm(request.POST, instance=order)
+        form = OrderForm(request.POST, request.FILES, instance=order)
         if form.is_valid():
             form.save()
-    context = {
-        "order": order,
-        "orderitems": orderitems,
-        "form": form,
-    }
+        return redirect(request.META["HTTP_REFERER"])
+    else:
+        context = {
+            "order": order,
+            "orderitems": orderitems,
+            "form": form,
+        }
     return render(request, "delivery/delivery_details.html", context)
 
 
@@ -46,6 +50,16 @@ def delivery_items_status(request, pk_id):
         "orderitems": orderitems,
     }
     return render(request, "delivery/delivery_items_status.html", context)
+
+
+def my_delivery_list(request, user):
+    order_list = Order.objects.filter(driver=user, status="Delivered").order_by(
+        "-updated_at"
+    )
+    my_table = MyDeliveryTable(order_list)
+    RequestConfig(request, paginate={"per_page": 5}).configure(my_table)
+    context = {"my_table": my_table}
+    return render(request, "delivery/my_delivery_list.html", context)
 
 
 def vegi_order_list(request):

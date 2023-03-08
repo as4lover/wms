@@ -41,13 +41,14 @@ class OrderAdmin(admin.ModelAdmin):
         "company_name",
         "tracking_no",
         "status",
-        "representative",
-        "rep_last_name",
-        "rep_first_name",
+        "driver",
+        "driver_last_name",
+        "driver_first_name",
         "message",
         "ami_file",
         "order_pdf",
         "ami_daily_file",
+        "delivery_photo",
     )
     list_editable = [
         "status",

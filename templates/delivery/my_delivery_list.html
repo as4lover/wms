@@ -1,0 +1,17 @@
+{% extends './delivery_base.html' %}
+{% load render_table from django_tables2 %}
+{% block content %}
+<div class="container" style>
+    <div class="card mt-3">
+        <div class="card-header">
+            <h5>배송완료</h5>
+        </div>
+    <div class="card-body">
+        {% render_table my_table %}
+    </div><!--end card-body-->
+    </div><!--end card-->
+</div><!--end container-->
+
+
+{% endblock %}
+

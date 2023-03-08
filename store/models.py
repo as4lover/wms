@@ -145,12 +145,12 @@ class Order(models.Model):
     ami_daily_file = models.FileField(upload_to="order/daily/", blank=True)
     order_pdf = models.FileField(upload_to="order/pdf/%Y/%m/%d/", blank=True)
     pdf_daily_file = models.FileField(upload_to="order/daily", blank=True)
-    representative = models.CharField(max_length=100, blank=True)
-    rep_first_name = models.CharField(max_length=50, blank=True)
-    rep_last_name = models.CharField(max_length=50, blank=True)
+    driver = models.CharField(max_length=100, blank=True)
+    driver_first_name = models.CharField(max_length=50, blank=True)
+    driver_last_name = models.CharField(max_length=50, blank=True)
     delivery_note = models.TextField(null=True, blank=True)
     delivery_photo = models.ImageField(
-        verbose_name="사진업로드", upload_to="order/delivery/%Y/%m/%d", null=True
+        verbose_name="사진업로드", upload_to="order/delivery/%Y/%m/%d", blank=True
     )
 
     def __str__(self):

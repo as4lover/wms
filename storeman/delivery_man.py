@@ -1,10 +1,8 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 from delivery.models import StaffMember
-from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django_tables2 import RequestConfig
 from storeman.tables import StaffMemberTable
-from customer.models import User
 from .forms import EditDeliveryTeamForm
 
 
