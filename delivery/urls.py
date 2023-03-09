@@ -4,6 +4,7 @@ from .views import (
     delivery_details,
     delivery_items_status,
     my_delivery_list,
+    my_delivery_detail,
     vegi_order_list,
 )
 
@@ -18,5 +19,8 @@ urlpatterns = [
         name="delivery_items_status",
     ),
     path("my_delivery_list/<str:user>", my_delivery_list, name="my_delivery_list"),
+    path(
+        "my_delivery_detail/<str:pk_id>", my_delivery_detail, name="my_delivery_detail"
+    ),
     path("vegi_order", vegi_order_list, name="vegi_order_list"),
 ]

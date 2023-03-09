@@ -71,60 +71,61 @@ def submit_order(request):
     now = datetime.datetime.now()
     csv_files = glob.glob(f"ami-*.csv")
     merged_file = glob.glob(f"daily*.csv")
-    for status in daily_order:
-        if status.status != "Pending":
-            messages.info(request, "알맹이용파일이 있습니다.")
-        else:
-            daily_temp = "temp.csv"
-            daily_merge_name = f"daily_ami_merged-{now.year}{now.month}{now.day}{now.hour}{now.minute}.csv"
-            df_append = pd.concat(map(pd.read_csv, csv_files))
-            df_append.to_csv(
-                daily_temp,
-                encoding="utf-8",
-                index=False,
-            )
-            temp_data = pd.read_csv(daily_temp, encoding="utf-8")
-            df = pd.DataFrame(temp_data)
-            without_vegi_data = df[~df["제품코드"].str.contains("V")]
-            without_vegi_data.to_csv(
-                daily_merge_name, encoding="utf-8", index=False
-            )  # 야채오더 제외
-            os.remove("temp.csv")
-            # csv file database에 넣기
-            save_daily_ami = DailyJobs.objects.create(created_user=request.user)
-            save_daily_ami.daily_merged_csv.save(
-                daily_merge_name, File(open(daily_merge_name, "r"))
-            )
-            ### 주문장 하나로 합치기
-            pdf_files = glob.glob(f"*.pdf")
-            merger = PdfFileMerger()
-            for pdf in pdf_files:
-                merger.append(pdf)
-            merged_pdf = f"daily_merged_pdf-{now.year}{now.month}{now.day}.pdf"
-            merger.write(merged_pdf)
-            merger.close()
-            # PDF file database에 넣기
-            save_daily_ami.daily_merged_pdf.save(
-                merged_pdf, File(open(merged_pdf, "rb"))
-            )  # PDF는 바이트형식이라 반드시 rb로 읽어야함
-            # daily 파일들 지우기
-            for daily_order_list in daily_order:
-                daily_order_list.ami_daily_file.close()
-                daily_order_list.ami_daily_file.delete()
-                daily_order_list.pdf_daily_file.close()
-                daily_order_list.pdf_daily_file.delete()
-            all_csv_files = glob.glob(f"*.csv")
-            all_pdf_files = glob.glob(f"*.pdf")
-            all_files = all_csv_files + all_pdf_files
-            for files in all_files:
-                try:
-                    os.remove(files)
-                except OSError as e:
-                    print("Error")
-            # DB Status update from Pending to Our for delivery
-            daily_order.update(status="Out for delivery")
-            messages.info(request, "알맹이용 파일이 만들어졌습니다.")
-
+    print(len(csv_files))
+    if len(csv_files) == 0:
+        messages.info(request, "CSV 파일들이 없습니다...")
+    else:
+        daily_temp = "temp.csv"
+        daily_merge_name = (
+            f"daily_ami_merged-{now.year}{now.month}{now.day}{now.hour}{now.minute}.csv"
+        )
+        df_append = pd.concat(map(pd.read_csv, csv_files))
+        df_append.to_csv(
+            daily_temp,
+            encoding="utf-8",
+            index=False,
+        )
+        temp_data = pd.read_csv(daily_temp, encoding="utf-8")
+        df = pd.DataFrame(temp_data)
+        without_vegi_data = df[~df["제품코드"].str.contains("V")]
+        without_vegi_data.to_csv(
+            daily_merge_name, encoding="utf-8", index=False
+        )  # 야채오더 제외
+        os.remove("temp.csv")
+        # csv file database에 넣기
+        save_daily_ami = DailyJobs.objects.create(created_user=request.user)
+        save_daily_ami.daily_merged_csv.save(
+            daily_merge_name, File(open(daily_merge_name, "r"))
+        )
+        ### 주문장 하나로 합치기
+        pdf_files = glob.glob(f"*.pdf")
+        merger = PdfFileMerger()
+        for pdf in pdf_files:
+            merger.append(pdf)
+        merged_pdf = f"daily_merged_pdf-{now.year}{now.month}{now.day}.pdf"
+        merger.write(merged_pdf)
+        merger.close()
+        # PDF file database에 넣기
+        save_daily_ami.daily_merged_pdf.save(
+            merged_pdf, File(open(merged_pdf, "rb"))
+        )  # PDF는 바이트형식이라 반드시 rb로 읽어야함
+        # daily 파일들 지우기
+        for daily_order_list in daily_order:
+            daily_order_list.ami_daily_file.close()
+            daily_order_list.ami_daily_file.delete()
+            daily_order_list.pdf_daily_file.close()
+            daily_order_list.pdf_daily_file.delete()
+        all_csv_files = glob.glob(f"*.csv")
+        all_pdf_files = glob.glob(f"*.pdf")
+        all_files = all_csv_files + all_pdf_files
+        for files in all_files:
+            try:
+                os.remove(files)
+            except OSError as e:
+                print("Error")
+        # DB Status update from Pending to Our for delivery
+        daily_order.update(status="Out for delivery")
+        messages.info(request, "알맹이용 파일이 만들어졌습니다.")
     return HttpResponseRedirect(request.META.get("HTTP_REFERER"))
 
 

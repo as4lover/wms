@@ -2,7 +2,7 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 from store.models import *
 from .forms import OrderForm, ItemStatusForm
-from .table import MyDeliveryTable
+from .table import MyDeliveryTable, MyDeliveryDetailTable
 from django_tables2 import RequestConfig
 
 
@@ -56,10 +56,19 @@ def my_delivery_list(request, user):
     order_list = Order.objects.filter(driver=user, status="Delivered").order_by(
         "-updated_at"
     )
+    order_items = OrderItem.objects.filter(order=order_list)
     my_table = MyDeliveryTable(order_list)
     RequestConfig(request, paginate={"per_page": 5}).configure(my_table)
     context = {"my_table": my_table}
     return render(request, "delivery/my_delivery_list.html", context)
+
+
+def my_delivery_detail(request, pk_id):
+    order_details = Order.objects.filter(id=pk_id).first()
+    orderitems = OrderItem.objects.filter(order=order_details)
+    item_table = MyDeliveryDetailTable(orderitems)
+    context = {"order_details": order_details, "item_table": item_table}
+    return render(request, "delivery/my_delivery_detail.html", context)
 
 
 def vegi_order_list(request):

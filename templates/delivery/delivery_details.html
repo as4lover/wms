@@ -5,6 +5,7 @@
 {% if request.user.is_staff %}
 <div class="container-sm container-fluid">
   <h6 class="text-center mt-3">{{order.company_name}}: {{order.tracking_no}}</h6>
+  <h6>고객전달사항: {{order.message}}</h6>
   <div class="row">
     <div class="col-6-sm">
         <table class="table text-center table-responsive-sm">
@@ -43,6 +44,7 @@
       {{form.status|as_crispy_field}}
       {{form.payment_mode|as_crispy_field}}
       {{form.delivery_photo|as_crispy_field}}
+      <span class="fs-6">사진크기는2-3MB</span>
     </div>
         <div class="card border-0 p-2">
           <div class="card-body">

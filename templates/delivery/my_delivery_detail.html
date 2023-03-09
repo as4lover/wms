@@ -1,0 +1,27 @@
+{% extends './delivery_base.html' %}
+{% load crispy_forms_tags %}
+{% load render_table from django_tables2 %}
+{% block content %}
+<div class="container-sm">
+    <div class="card mt-3">
+        <div class="card-header">
+            {{order_details.company_name}}
+        </div><!--end card-header-->
+        <div class="card-body">
+            <ul>
+                <li>
+                 수금상태: {{order_details.payment_mode}}   
+                </li>
+                <li>
+                특이사항: {{order_details.delivery_note}}   
+                </li>
+            </ul>
+            {% render_table item_table %}
+        </div><!--end card-body-->
+        <div class="card-footer">
+            <a href="{% url "delivery:my_delivery_list" request.user %}?next={{ request.path|urlencode }}"
+            class="btn btn-sm btn-primary float-end">나가기</a>
+        </div>
+    </div><!--End card-->
+</div><!--End container-->
+{% endblock %}

@@ -9,6 +9,11 @@
     <div class="card-body">
         {% render_table my_table %}
     </div><!--end card-body-->
+    <div class="card-footer">
+        <a href="{% url "delivery:delivery_home" %}?next={{ request.path|urlencode }}"
+        class="btn btn-sm btn-primary float-end">나가기</a>
+    </div>
+
     </div><!--end card-->
 </div><!--end container-->
 

@@ -18,7 +18,8 @@ class OrderForm(ModelForm):
     )
     status = forms.ChoiceField(label="배송상태", choices=STATUS)
     payment_mode = forms.ChoiceField(label="결제상태", choices=PAYMENT)
-    delivery_photo = forms.ImageField(required=False)
+    delivery_photo = forms.ImageField(label="사진업로드", required=False)
+
     class Meta:
         model = Order
         fields = [

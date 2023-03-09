@@ -39,7 +39,7 @@ class AddressBook(models.Model):
     postcode = models.CharField(max_length=4, null=True, blank=True)
     default = models.BooleanField(default=False)
     delivery_instructions = models.CharField(max_length=255, null=True, blank=True)
-    representative = models.ForeignKey(
+    driver = models.ForeignKey(
         StaffMember, null=True, blank=True, on_delete=models.CASCADE
     )
     vegi_code = models.CharField(max_length=6, null=True, unique=True, blank=True)

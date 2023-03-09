@@ -11,7 +11,7 @@ class AddressBookAdmin(admin.ModelAdmin):
         "e_name",
         "biz_type",
         "address",
-        "representative",
+        "driver",
         "vegi_code",
         "gen_code",
     ]
