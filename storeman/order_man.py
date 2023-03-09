@@ -85,11 +85,11 @@ def submit_order(request):
             encoding="utf-8",
             index=False,
         )
-        temp_data = pd.read_csv(daily_temp, encoding="utf-8")
+        temp_data = pd.read_csv(daily_temp, encoding="utf-8-sig")
         df = pd.DataFrame(temp_data)
         without_vegi_data = df[~df["제품코드"].str.contains("V")]
         without_vegi_data.to_csv(
-            daily_merge_name, encoding="utf-8", index=False
+            daily_merge_name, encoding="utf-8-sig", index=False
         )  # 야채오더 제외
         os.remove("temp.csv")
         # csv file database에 넣기
@@ -102,7 +102,9 @@ def submit_order(request):
         merger = PdfFileMerger()
         for pdf in pdf_files:
             merger.append(pdf)
-        merged_pdf = f"daily_merged_pdf-{now.year}{now.month}{now.day}.pdf"
+        merged_pdf = (
+            f"daily_merged_pdf-{now.year}{now.month}{now.day}{now.hour}{now.minute}.pdf"
+        )
         merger.write(merged_pdf)
         merger.close()
         # PDF file database에 넣기
