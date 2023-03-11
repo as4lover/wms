@@ -21,7 +21,7 @@ def order_list(request):
         return redirect("/login")
     orders = Order.objects.all().order_by("-created_at")
     table = OrderListTable(orders)
-    RequestConfig(request, paginate={"per_page": 5}).configure(table)
+    RequestConfig(request, paginate={"per_page": 10}).configure(table)
     context = {
         "table": table,
     }

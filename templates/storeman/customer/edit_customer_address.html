@@ -1,17 +1,64 @@
 {% extends '../admin_base.html' %}
 {% load crispy_forms_tags %}
-{% load widget_tweaks %}
 {% block content %}
 <div class="container p-2">
     <div class="card">
-        <div class="card-header">배송지 수정</div>
+        <div class="card-header">
+            <h5>배송지수정</h5>
+        </div>
         <div class="card-body">
             <form method="POST">
                 {% csrf_token %}
-                {{form|crispy}}
+                <div class="row">
+                    <div class="col-md-3">
+                        {{form.nick_name|as_crispy_field}}
+                    </div>
+                    <div class="col-md-3">
+                        {{form.h_name|as_crispy_field}}
+                    </div>
+                    <div class="col-md-3">
+                        {{form.e_name|as_crispy_field}}
+                    </div>
+                    <div class="col-md-3">
+                        {{form.biz_type|as_crispy_field}}
+                    </div>
+                </div><!--first row-->
+                <div class="row">
+                    <div class="col-md-5">
+                        {{form.address|as_crispy_field}}
+                    </div>
+                    <div class="col-md-2">
+                        {{form.state|as_crispy_field}}
+                    </div>
+                    <div class="col-md-2">
+                        {{form.city|as_crispy_field}}
+                    </div>
+                    <div class="col-md-2">
+                        {{form.postcode|as_crispy_field}}
+                    </div>
+                </div><!--Second row-->
+                <div class="row">
+                    <div class="col-md-3">
+                        {{form.driver|as_crispy_field}}
+                    </div>
+                    <div class="col-md-3">
+                        {{form.vegi_code|as_crispy_field}}
+                    </div>
+                    <div class="col-md-3">
+                        {{form.gen_code|as_crispy_field}}
+                    </div>
+                    <div class="col-md-3 p-4">
+                        {{form.default|as_crispy_field}}
+                    </div>
+                </div><!--Third row-->
+                <div class="row">
+                    <div class="col-md-3">
+                        {{form.delivery_instructions|as_crispy_field}}
+                    </div>
+                </div><!--Forth row-->
                 <div class="card-footer">
-                    <button type="submit" class="btn btn-outline-warning">업데이트</button>
-                    <a href="{% url "storeman:display_customer_details" customer.id %}" class="btn btn-outline-primary">뒤로가기</a>
+                    <button type="submit" class="btn btn-warning">저장하기</button>
+                    <a href="{% url "storeman:display_customer_details" customer.id %}" class="btn btn-primary">뒤로가기</a>
                     <a href="#delModal" roll="button" data-bs-toggle="modal" class="btn btn-danger float-end"><i class="bi bi-trash3"></i></a>
                 </div>
             </form>

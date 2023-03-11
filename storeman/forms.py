@@ -1,7 +1,7 @@
 from django.forms import ModelForm, inlineformset_factory
 from django.contrib.auth.forms import UserCreationForm
 from customer.models import User
-from company.models import AddressBook
+from company.models import AddressBook, BusinessType
 from store.models import OrderCode, Product
 from delivery.models import StaffMember
 from django import forms
@@ -27,9 +27,59 @@ AddressBookFormSet = inlineformset_factory(
 
 
 class EditAddressForm(ModelForm):
+    aus_state = (
+        ("NSW", "NSW"),
+        ("VIC", "VIC"),
+        ("QLD", "QLD"),
+        ("ACT", "ACT"),
+        ("SA", "SA"),
+        ("WA", "WA"),
+        ("NT", "NT"),
+        ("TAS", "TAS"),
+    )
+    nick_name = forms.CharField(label="별칭", widget=forms.TextInput)
+    h_name = forms.CharField(label="상호명(한글)", widget=forms.TextInput)
+    e_name = forms.CharField(label="상호명(영문)", widget=forms.TextInput)
+    biz_type = forms.CharField(label="업종", widget=forms.TextInput)
+    address = forms.CharField(label="주소", widget=forms.TextInput)
+    state = forms.ChoiceField(label="주", choices=aus_state)
+    city = forms.CharField(label="도시", widget=forms.TextInput)
+    postcode = forms.CharField(label="우편번호", max_length=4, widget=forms.TextInput)
+    default = forms.BooleanField(label="기본배송지", required=False)
+    delivery_instructions = forms.CharField(
+        label="배송방법", required=False, widget=forms.Textarea
+    )
+    driver = forms.CharField(label="배송담당", widget=forms.TextInput)
+    vegi_code = forms.CharField(label="야채코드", max_length=6, widget=forms.TextInput)
+    gen_code = forms.CharField(label="일반코드", max_length=6, widget=forms.TextInput)
+
     class Meta:
         model = AddressBook
-        fields = "__all__"
+        fields = [
+            "nick_name",
+            "h_name",
+            "e_name",
+            "biz_type",
+            "address",
+            "state",
+            "city",
+            "postcode",
+            "default",
+            "delivery_instructions",
+            "driver",
+            "vegi_code",
+            "gen_code",
+        ]
+
+    # 외래키 처리방법
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields["biz_type"] = forms.ModelChoiceField(
+            queryset=BusinessType.objects.all()
+        )
+        self.fields["driver"] = forms.ModelChoiceField(
+            queryset=StaffMember.objects.all()
+        )
 
 
 class CreateUserForm(UserCreationForm):

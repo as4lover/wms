@@ -82,6 +82,7 @@ class OrderListTable(tables.Table):
             "ami_file",
             "order_pdf",
             "driver",
+            "driver_team",
             "driver_first_name",
             "driver_last_name",
             "delivery_note",
