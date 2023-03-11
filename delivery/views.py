@@ -38,6 +38,7 @@ def delivery_details(request, tk_no):
     return render(request, "delivery/delivery_details.html", context)
 
 
+@login_required(login_url="account_login")
 def delivery_items_status(request, pk_id):
     orderitems = OrderItem.objects.get(id=pk_id)
     item_form = ItemStatusForm(instance=orderitems)  # update를 위해 instance 사용
@@ -52,6 +53,7 @@ def delivery_items_status(request, pk_id):
     return render(request, "delivery/delivery_items_status.html", context)
 
 
+@login_required(login_url="account_login")
 def my_delivery_list(request, user):
     order_list = Order.objects.filter(driver=user, status="Delivered").order_by(
         "-updated_at"
@@ -63,6 +65,7 @@ def my_delivery_list(request, user):
     return render(request, "delivery/my_delivery_list.html", context)
 
 
+@login_required(login_url="account_login")
 def my_delivery_detail(request, pk_id):
     order_details = Order.objects.filter(id=pk_id).first()
     orderitems = OrderItem.objects.filter(order=order_details)
@@ -71,6 +74,7 @@ def my_delivery_detail(request, pk_id):
     return render(request, "delivery/my_delivery_detail.html", context)
 
 
+@login_required(login_url="account_login")
 def vegi_order_list(request):
     if not request.user.is_staff | request.user.is_superuser:
         return redirect("/login")

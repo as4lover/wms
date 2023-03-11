@@ -60,6 +60,7 @@ def place_order(request):
     new_order.city = company.city
     new_order.state = company.state
     new_order.postcode = company.postcode
+    new_order.driver_team = company.driver.region
     new_order.driver = company.driver.name
     new_order.driver_first_name = company.driver.name.first_name
     new_order.driver_last_name = company.driver.name.last_name

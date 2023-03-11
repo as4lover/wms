@@ -5,9 +5,7 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from store.models import Order, OrderItem
-from django.contrib import messages
-
-from .filters import ProductFilter
+from delivery.models import StaffMember
 
 from customer.models import User
 from company.models import AddressBook
@@ -21,9 +19,15 @@ import codecs
 from django.template.loader import render_to_string
 from weasyprint import HTML
 import tempfile
+from datetime import datetime, timedelta
 import pandas as pd
-import os
+import os, pytz
 
+au_timezone = pytz.timezone("Australia/Sydney")
+now = datetime.now(au_timezone)
+now_year = now.year
+now_month = now.month
+now_day = now.day
 
 # from store.utils import xhtml_render_to_pdf, weasypdf_render_to_pdf
 
@@ -33,28 +37,57 @@ def admin_home(request):
     if not request.user.is_staff | request.user.is_superuser:
         return redirect("/login")
     orders = Order.objects.all().order_by("-created_at")
+    order_item = OrderItem.objects.filter(order__status="Delivered")
+    staffs = StaffMember.objects.all()
+    order_team = orders.filter(
+        updated_at__year=now_year,
+        updated_at__month=now_month,
+        updated_at__day=now_day,
+    )
+    drivers = []
+    teams = []
+    for driver in order_team:
+        driver_id = driver.driver
+        drivers.append(driver_id)
+    for drv in drivers:
+        staff = staffs.filter(name__username=drv)
+        for team in staff:
+            teams.append(team.region)
+    east_team = teams.count("동부팀")
+    west_team = teams.count("서부팀")
+    south_team = teams.count("남부팀")
+    north_team = teams.count("북부팀")
     pending_order = orders.filter(status="Pending").count()
     on_delivery = orders.filter(status="Out for delivery").count()
-    delivered = orders.filter(status="Delivered").count()
-
-    page_num = request.GET.get("page", 1)
-    paginator = Paginator(orders, 5)
-    try:
-        page_obj = paginator.page(page_num)
-    except PageNotAnInteger:
-        page_obj = paginator.page(1)
-    except EmptyPage:
-        page_obj = paginator.page(paginator.num_pages)
-
-    page_num_counter = "a" * page_obj.paginator.num_pages
+    delivered = orders.filter(
+        status="Delivered",
+        updated_at__year=now_year,
+        updated_at__month=now_month,
+        updated_at__day=now_day,
+    ).count()
+    weekly_delivered = orders.filter(
+        status="Delivered", updated_at__gte=now - timedelta(days=7)
+    ).count()
+    monthly_delivered = orders.filter(
+        status="Delivered", updated_at__gte=now - timedelta(days=30)
+    ).count()
+    yearly_delivered = orders.filter(
+        status="Delivered", updated_at__gte=now - timedelta(days=365)
+    ).count()
 
     context = {
+        "east_team": east_team,
+        "west_team": west_team,
+        "south_team": south_team,
+        "north_team": north_team,
         "orders": orders,
+        "order_item": order_item,
         "pending_order": pending_order,
         "on_delivery": on_delivery,
         "delivered": delivered,
-        "page_obj": page_obj,
-        "page_num_counter": page_num_counter,
+        "weekly_delivered": weekly_delivered,
+        "monthly_delivered": monthly_delivered,
+        "yearly_delivered": yearly_delivered,
     }
     return render(request, "storeman/dashboard.html", context)
 

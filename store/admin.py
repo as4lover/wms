@@ -42,6 +42,7 @@ class OrderAdmin(admin.ModelAdmin):
         "tracking_no",
         "status",
         "driver",
+        "driver_team",
         "driver_last_name",
         "driver_first_name",
         "message",

@@ -81,10 +81,11 @@ class OrderListTable(tables.Table):
             "ami_daily_file",
             "ami_file",
             "order_pdf",
-            "representative",
-            "rep_first_name",
-            "rep_last_name",
+            "driver",
+            "driver_first_name",
+            "driver_last_name",
             "delivery_note",
+            "delivery_photo",
             "fname",
             "lname",
             "email",
@@ -94,6 +95,12 @@ class OrderListTable(tables.Table):
             "city",
             "pdf_daily_file",
         )
+
+    view = tables.TemplateColumn(
+        template_name="storeman/order/order_list_view_column.html",
+        verbose_name="보기",
+        orderable=False,
+    )
 
 
 ## DAily Jobs table

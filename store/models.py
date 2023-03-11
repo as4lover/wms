@@ -148,9 +148,10 @@ class Order(models.Model):
     driver = models.CharField(max_length=100, blank=True)
     driver_first_name = models.CharField(max_length=50, blank=True)
     driver_last_name = models.CharField(max_length=50, blank=True)
+    driver_team = models.CharField(max_length=100, blank=True)
     delivery_note = models.TextField(null=True, blank=True)
     delivery_photo = models.ImageField(
-        verbose_name="사진업로드", upload_to="order/delivery/%Y/%m/%d", blank=True
+        verbose_name="첨부사진", upload_to="order/delivery/%Y/%m/%d", blank=True
     )
 
     def __str__(self):

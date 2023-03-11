@@ -132,6 +132,14 @@ def submit_order(request):
 
 
 @login_required(login_url="account_login")
+def order_list_detail(request, pk_id):
+    order_list = Order.objects.filter(id=pk_id).first()
+    order_items = OrderItem.objects.filter(order=order_list)
+    context = {"order_list": order_list, "order_items": order_items}
+    return render(request, "storeman/order/order_list_detail.html", context)
+
+
+@login_required(login_url="account_login")
 def order_details(request, tk_no):
     if not request.user.is_staff | request.user.is_superuser:
         return redirect("/login")

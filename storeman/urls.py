@@ -31,6 +31,7 @@ from .order_man import (
     order_details,
     submit_order,
     daily_order,
+    order_list_detail,
 )
 
 from .staff_man import (
@@ -43,14 +44,15 @@ from .staff_man import (
 from .delivery_man import (
     display_delivery_team,
     edit_delivery_team,
-    
 )
 
 app_name = "storeman"
 
 urlpatterns = [
+    # Order
     path("", admin_home, name="admin_home"),
     path("order_list/", order_list, name="order_list"),
+    path("order_list_detail/<str:pk_id>", order_list_detail, name="order_list_detail"),
     path("daily_order/", daily_order, name="daily_order"),
     path("submit_order/", submit_order, name="submit_order"),
     path("create_order/", create_order, name="create_order"),
