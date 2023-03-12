@@ -1,6 +1,6 @@
 import base64
 from django.contrib.auth.decorators import login_required
-
+from django.db.models import Count, Q
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from store.models import Order, OrderItem
@@ -11,8 +11,6 @@ from company.models import AddressBook
 from store.models import Product, OrderCode
 from .tools import *
 
-# Import Pagination Stuff
-from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 import csv
 import codecs
@@ -47,24 +45,23 @@ def admin_home(request):
         return redirect("/login")
     order_item = OrderItem.objects.filter(order__status="Delivered")
     staffs = StaffMember.objects.all()
-    order_team = Order.objects.filter(
+    order_team = Order.objects.values("driver_team").filter(
         updated_at__year=now_year,
         updated_at__month=now_month,
         updated_at__day=now_day,
     )
-    drivers = []
-    teams = []
-    for driver in order_team:
-        driver_id = driver.driver
-        drivers.append(driver_id)
-    for drv in drivers:
-        staff = staffs.filter(name__username=drv)
-        for team in staff:
-            teams.append(team.region)
-    east_team = teams.count("동부팀")
-    west_team = teams.count("서부팀")
-    south_team = teams.count("남부팀")
-    north_team = teams.count("북부팀")
+    east_team = order_team.aggregate(
+        count=Count("driver_team", filter=Q(driver_team="동부팀"))
+    )
+    west_team = order_team.aggregate(
+        count=Count("driver_team", filter=Q(driver_team="서부팀"))
+    )
+    south_team = order_team.aggregate(
+        count=Count("driver_team", filter=Q(driver_team="남부팀"))
+    )
+    north_team = order_team.aggregate(
+        count=Count("driver_team", filter=Q(driver_team="북부팀"))
+    )
     pending_order = Order.objects.filter(status="Pending").count()
     on_delivery = Order.objects.filter(status="Out for delivery").count()
     delivered = Order.objects.filter(
@@ -72,11 +69,16 @@ def admin_home(request):
         updated_at__year=now_year,
         updated_at__month=now_month,
         updated_at__day=now_day,
-    ).count()
-    this_weekly_delivered = Order.objects.filter(
+    )
+    daily_delivered = delivered.aggregate(
+        count=Count("status", filter=Q(status="Delivered"))
+    )
+    this_weekly_delivered_qs = Order.objects.filter(
         status="Delivered", updated_at__range=[this_monday, this_friday]
-    ).count()
-
+    )
+    this_weekly_delivered = this_weekly_delivered_qs.aggregate(
+        count=Count("status", filter=Q(status="Delivered"))
+    )
     last_weekly_delivered = Order.objects.filter(
         status="Delivered", updated_at__range=[last_monday, last_friday]
     ).count()
@@ -93,10 +95,6 @@ def admin_home(request):
         status="Delivered", updated_at__year=now_year
     ).count()
 
-    print(east_team)
-    print(west_team)
-    print(south_team)
-    print(north_team)
     context = {
         "east_team": east_team,
         "west_team": west_team,
@@ -105,7 +103,7 @@ def admin_home(request):
         "order_item": order_item,
         "pending_order": pending_order,
         "on_delivery": on_delivery,
-        "delivered": delivered,
+        "daily_delivered": daily_delivered,
         "this_weekly_delivered": this_weekly_delivered,
         "last_weekly_delivered": last_weekly_delivered,
         "this_monthly_delivered": this_monthly_delivered,
