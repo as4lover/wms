@@ -45,10 +45,9 @@ last_month_end = get_last_month_end()
 def admin_home(request):
     if not request.user.is_staff | request.user.is_superuser:
         return redirect("/login")
-    orders = Order.objects.all().order_by("-created_at")
     order_item = OrderItem.objects.filter(order__status="Delivered")
     staffs = StaffMember.objects.all()
-    order_team = orders.filter(
+    order_team = Order.objects.filter(
         updated_at__year=now_year,
         updated_at__month=now_month,
         updated_at__day=now_day,
@@ -66,40 +65,43 @@ def admin_home(request):
     west_team = teams.count("서부팀")
     south_team = teams.count("남부팀")
     north_team = teams.count("북부팀")
-    pending_order = orders.filter(status="Pending").count()
-    on_delivery = orders.filter(status="Out for delivery").count()
-    delivered = orders.filter(
+    pending_order = Order.objects.filter(status="Pending").count()
+    on_delivery = Order.objects.filter(status="Out for delivery").count()
+    delivered = Order.objects.filter(
         status="Delivered",
         updated_at__year=now_year,
         updated_at__month=now_month,
         updated_at__day=now_day,
     ).count()
-    this_weekly_delivered = orders.filter(
+    this_weekly_delivered = Order.objects.filter(
         status="Delivered", updated_at__range=[this_monday, this_friday]
     ).count()
 
-    last_weekly_delivered = orders.filter(
+    last_weekly_delivered = Order.objects.filter(
         status="Delivered", updated_at__range=[last_monday, last_friday]
     ).count()
 
-    this_monthly_delivered = orders.filter(
+    this_monthly_delivered = Order.objects.filter(
         status="Delivered", updated_at__range=[this_month_start, this_month_end]
     ).count()
 
-    last_monthly_delivered = orders.filter(
+    last_monthly_delivered = Order.objects.filter(
         status="Delivered", updated_at__range=[last_month_start, last_month_end]
     ).count()
 
-    yearly_delivered = orders.filter(
+    yearly_delivered = Order.objects.filter(
         status="Delivered", updated_at__year=now_year
     ).count()
 
+    print(east_team)
+    print(west_team)
+    print(south_team)
+    print(north_team)
     context = {
         "east_team": east_team,
         "west_team": west_team,
         "south_team": south_team,
         "north_team": north_team,
-        "orders": orders,
         "order_item": order_item,
         "pending_order": pending_order,
         "on_delivery": on_delivery,
