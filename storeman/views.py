@@ -1,7 +1,6 @@
 import base64
 from django.contrib.auth.decorators import login_required
 
-# from urllib import response
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from store.models import Order, OrderItem
@@ -10,6 +9,7 @@ from delivery.models import StaffMember
 from customer.models import User
 from company.models import AddressBook
 from store.models import Product, OrderCode
+from .tools import *
 
 # Import Pagination Stuff
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
@@ -19,16 +19,25 @@ import codecs
 from django.template.loader import render_to_string
 from weasyprint import HTML
 import tempfile
-from datetime import datetime, timedelta
+from datetime import datetime, date
 import pandas as pd
 import os, pytz
 
+
 au_timezone = pytz.timezone("Australia/Sydney")
+today = date.today()
 now = datetime.now(au_timezone)
 now_year = now.year
 now_month = now.month
 now_day = now.day
-
+this_monday = get_this_monday()
+this_friday = get_this_friday()
+last_monday = get_last_monday()
+last_friday = get_last_friday()
+this_month_start = get_this_month_start()
+this_month_end = get_this_month_end()
+last_month_start = get_last_month_start()
+last_month_end = get_last_month_end()
 # from store.utils import xhtml_render_to_pdf, weasypdf_render_to_pdf
 
 
@@ -65,14 +74,24 @@ def admin_home(request):
         updated_at__month=now_month,
         updated_at__day=now_day,
     ).count()
-    weekly_delivered = orders.filter(
-        status="Delivered", updated_at__gte=now - timedelta(days=7)
+    this_weekly_delivered = orders.filter(
+        status="Delivered", updated_at__range=[this_monday, this_friday]
     ).count()
-    monthly_delivered = orders.filter(
-        status="Delivered", updated_at__gte=now - timedelta(days=30)
+
+    last_weekly_delivered = orders.filter(
+        status="Delivered", updated_at__range=[last_monday, last_friday]
     ).count()
+
+    this_monthly_delivered = orders.filter(
+        status="Delivered", updated_at__range=[this_month_start, this_month_end]
+    ).count()
+
+    last_monthly_delivered = orders.filter(
+        status="Delivered", updated_at__range=[last_month_start, last_month_end]
+    ).count()
+
     yearly_delivered = orders.filter(
-        status="Delivered", updated_at__gte=now - timedelta(days=365)
+        status="Delivered", updated_at__year=now_year
     ).count()
 
     context = {
@@ -85,8 +104,10 @@ def admin_home(request):
         "pending_order": pending_order,
         "on_delivery": on_delivery,
         "delivered": delivered,
-        "weekly_delivered": weekly_delivered,
-        "monthly_delivered": monthly_delivered,
+        "this_weekly_delivered": this_weekly_delivered,
+        "last_weekly_delivered": last_weekly_delivered,
+        "this_monthly_delivered": this_monthly_delivered,
+        "last_monthly_delivered": last_monthly_delivered,
         "yearly_delivered": yearly_delivered,
     }
     return render(request, "storeman/dashboard.html", context)
